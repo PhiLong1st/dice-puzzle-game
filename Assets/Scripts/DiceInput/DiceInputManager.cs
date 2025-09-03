@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DiceInputType { Type1, Type2, Type3, Type4, Type5 };
+public enum DiceInputType { Type1, Type2, Type3 };
 
 public class DiceInputTemplate
 {
@@ -15,11 +15,13 @@ public class DiceInputTemplate
     Type = type;
     Grid = grid;
   }
+
+  public bool IsValidCell(int r, int c) => Grid[r, c] == 1;
 }
 
 public class DiceInputManager : MonoBehaviour
 {
-  public DiceInputManager Instance { get; private set; }
+  public static DiceInputManager Instance { get; private set; }
 
   private Dictionary<DiceInputType, DiceInputTemplate> templateDictionary;
 
@@ -35,52 +37,70 @@ public class DiceInputManager : MonoBehaviour
     DontDestroyOnLoad(gameObject);
   }
 
-
   private void Start()
   {
-    templateDictionary = new();
-
-    var templates = new List<DiceInputTemplate> {
+    var gridTemplates = new List<DiceInputTemplate> {
       new DiceInputTemplate(DiceInputType.Type1, new int[,] { { 1 } }),
       new DiceInputTemplate(DiceInputType.Type2, new int[,] { { 1, 1 } }),
       new DiceInputTemplate(DiceInputType.Type3, new int[,] { { 1 }, { 1 } }),
-      new DiceInputTemplate(DiceInputType.Type4, new int[,] { { 1, 0 }, { 0, 1 } }),
-      new DiceInputTemplate(DiceInputType.Type5, new int[,] { { 0, 1 }, { 1, 0 } }),
     };
 
-    foreach (var diceInputTemplate in templates)
+    templateDictionary = new();
+    foreach (var diceInputTemplate in gridTemplates)
     {
       templateDictionary.Add(diceInputTemplate.Type, diceInputTemplate);
     }
   }
 
-  public DiceInput GenerateRandomDiceInput()
+  private DiceInputTemplate GetRandomTemplate()
   {
     var keys = new List<DiceInputType>(templateDictionary.Keys);
     var randomKey = keys[Random.Range(0, keys.Count)];
-    var template = templateDictionary[randomKey];
+    var randomTemplate = templateDictionary[randomKey];
+    return randomTemplate;
+  }
 
-    if (template == null)
+  public GameObject CreateRandomDiceInput()
+  {
+    var randomTemplate = GetRandomTemplate();
+    if (randomTemplate == null)
     {
       Debug.LogWarning("Randomly selected dice input template was null.");
       return null;
     }
 
-    var rows = template.Rows;
-    var cols = template.Cols;
+    var rows = randomTemplate.Rows;
+    var cols = randomTemplate.Cols;
     var diceTypeGrid = new DiceType?[rows, cols];
+    var dicePrefabs = new List<GameObject>();
 
     for (int r = 0; r < rows; ++r)
     {
       for (int c = 0; c < cols; ++c)
       {
-        if (template.Grid[r, c] == 1)
+        if (randomTemplate.IsValidCell(r, c))
         {
-          diceTypeGrid[r, c] = DiceManager.Instance.RandomDiceType();
+          var diceType = DiceManager.Instance.RandomDiceType();
+          diceTypeGrid[r, c] = diceType;
+          dicePrefabs.Add(DiceManager.Instance.GetDicePrefab(diceType));
         }
       }
     }
 
-    return new DiceInput(template.Type, diceTypeGrid);
+    var go = new GameObject($"DiceInput_{randomTemplate.Type}");
+    var comp = go.AddComponent<DiceInputData>();
+    comp.Initialize(randomTemplate.Type, diceTypeGrid);
+    var position = new Vector3(0, 0, 0);
+
+    foreach (var prefab in dicePrefabs)
+    {
+      if (!prefab) continue;
+      var tempPrefab = Instantiate(prefab, position, Quaternion.identity);
+      position.x += 1f;
+      tempPrefab.transform.SetParent(go.transform, false);
+    }
+
+    go.AddComponent<DiceInputController>();
+    return go;
   }
 }
