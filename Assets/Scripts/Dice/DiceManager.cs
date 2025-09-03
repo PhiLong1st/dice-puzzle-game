@@ -32,11 +32,6 @@ public class DiceManager : MonoBehaviour
   private void Start()
   {
     diceDictionary = new();
-    BuildDiceDictionary();
-  }
-
-  private void BuildDiceDictionary()
-  {
     foreach (var dicePrefab in dicePrefabs)
     {
       if (diceDictionary.ContainsKey(dicePrefab.Type)) continue;
@@ -63,5 +58,5 @@ public class DiceManager : MonoBehaviour
     return dicePrefab;
   }
 
-  public static DiceType RandomType() => (DiceType)UnityEngine.Random.Range(1, 7);
+  public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, 7);
 }
