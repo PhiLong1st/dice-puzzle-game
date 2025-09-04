@@ -15,7 +15,7 @@ public class DiceManager : MonoBehaviour
 {
   public static DiceManager Instance { get; private set; }
   [SerializeField] private DicePrefab[] dicePrefabs;
-  private Dictionary<DiceType, GameObject> diceDictionary;
+  private Dictionary<DiceType, GameObject> cachedDices;
 
   private void Awake()
   {
@@ -31,24 +31,30 @@ public class DiceManager : MonoBehaviour
 
   private void Start()
   {
-    diceDictionary = new();
+    BuildCachedDices();
+  }
+
+  private void BuildCachedDices()
+  {
+    cachedDices = new();
+    Debug.Log("<color=#60A5FA>DICE MANAGER: Loading dice prefabs…</color>");
     foreach (var dicePrefab in dicePrefabs)
     {
-      if (diceDictionary.ContainsKey(dicePrefab.Type)) continue;
+      if (cachedDices.ContainsKey(dicePrefab.Type)) continue;
 
       if (dicePrefab.Prefab == null)
       {
-        Debug.LogWarning($"DiceManager: Missing Prefab for ({dicePrefab.Type}).", this);
+        Debug.Log($"<color=#60A5FA>DICE MANAGER: Missing Prefab for ({dicePrefab.Type}).", this);
         continue;
       }
-
-      diceDictionary.Add(dicePrefab.Type, dicePrefab.Prefab);
+      cachedDices.Add(dicePrefab.Type, dicePrefab.Prefab);
     }
+    Debug.Log("<color=#60A5FA>DICE MANAGER: Done.</color>");
   }
 
   public GameObject GetDicePrefab(DiceType diceType)
   {
-    diceDictionary.TryGetValue(diceType, out GameObject dicePrefab);
+    cachedDices.TryGetValue(diceType, out GameObject dicePrefab);
 
     if (dicePrefab == null)
     {
