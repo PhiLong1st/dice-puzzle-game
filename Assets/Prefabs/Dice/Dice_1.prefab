@@ -58,23 +58,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -170
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dice_1
       objectReference: {fileID: 0}
+    - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.b
       value: 0.35635456
