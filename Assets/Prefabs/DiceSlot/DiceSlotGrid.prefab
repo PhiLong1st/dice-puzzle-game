@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4923971604377026185}
-  - component: {fileID: 1100172662929478921}
   - component: {fileID: 5948104409455128924}
-  - component: {fileID: -3477922701863178363}
+  - component: {fileID: 4216051031307543608}
   m_Layer: 5
   m_Name: DiceSlotGrid
   m_TagString: Untagged
@@ -38,20 +37,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 520, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1100172662929478921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4717143291234147070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 796ac5ee736572242979e3eac7e8e6a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rows: 5
-  cols: 5
 --- !u!114 &5948104409455128924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,8 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3036df826259b1a459001a59a1fccdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceSlotPrefab: {fileID: 0}
---- !u!114 &-3477922701863178363
+--- !u!114 &4216051031307543608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,7 +58,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4717143291234147070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70ba7821047e02543a2ae7d44546ab2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 81016ad50931d084bb51b1442fc45ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceSlotPrefab: {fileID: 8615775200157271813, guid: 19433de6d8ee2ed41b6e67074c805a5b, type: 3}
+  rows: 5
+  cols: 5
+  diceSlotPrefab: {fileID: 2335341650977702721, guid: 19433de6d8ee2ed41b6e67074c805a5b, type: 3}

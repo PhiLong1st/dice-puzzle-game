@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class DiceSlotGridVisuals : MonoBehaviour
 {
-  [SerializeField] private GameObject diceSlotPrefab;
   private GridLayoutGroup gridLayoutGroup;
   private CanvasRenderer canvasRenderer;
   private Image bgImage;

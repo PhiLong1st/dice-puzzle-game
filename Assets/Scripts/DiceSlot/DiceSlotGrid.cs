@@ -1,14 +1,28 @@
 using UnityEngine;
 
-public class DiceSlotGridController : MonoBehaviour
+public class DiceSlotGrid : MonoBehaviour
 {
+  [SerializeField] public int rows;
+  [SerializeField] public int cols;
+  public int Rows => rows;
+  public int Cols => cols;
+  private DiceSlot[,] GridData;
+
+  public bool TryGetDataAt(int r, int c, out DiceSlot? data)
+  {
+    data = null;
+    if (!InBounds(r, c) || GridData[r, c] == null) return false;
+    data = GridData[r, c];
+    return true;
+  }
+
+  private bool InBounds(int r, int c) => 0 <= r && r < rows && 0 <= c && c <= cols;
+
   [SerializeField] private GameObject diceSlotPrefab;
   private RectTransform rectTransform;
-  private DiceSlotGridData gridData;
 
   private void Start()
   {
-    gridData = GetComponent<DiceSlotGridData>();
     rectTransform = GetComponent<RectTransform>();
     BuildGrid();
   }
@@ -16,9 +30,6 @@ public class DiceSlotGridController : MonoBehaviour
   private void BuildGrid()
   {
     if (!diceSlotPrefab) return;
-
-    var rows = gridData.Rows;
-    var cols = gridData.Cols;
 
     for (int r = 0; r < rows; ++r)
     {
@@ -28,9 +39,8 @@ public class DiceSlotGridController : MonoBehaviour
         var clonedGORect = clonedGO.GetComponent<RectTransform>();
         clonedGORect.SetParent(rectTransform, worldPositionStays: false);
 
-        var diceSlot = clonedGO.GetComponent<DiceSlotData>();
-        var diceData = gridData.GetDiceDataAt(r, c);
-        diceSlot.Initialize(r, c, diceData);
+        var diceSlot = clonedGO.GetComponent<DiceSlot>();
+        diceSlot.Initialize(r, c);
       }
     }
   }

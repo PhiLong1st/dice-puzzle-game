@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dice_4
       objectReference: {fileID: 0}
+    - target: {fileID: 7481053239957901205, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
+      propertyPath: type
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.b
       value: 0.9245283

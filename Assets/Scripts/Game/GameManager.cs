@@ -22,14 +22,6 @@ public class GameManager : MonoBehaviour
     GameData = GetComponent<GameData>();
   }
 
-  private void GenerateNextDiceInput()
-  {
-    var diceType = DiceManager.Instance.RandomDiceType();
-    var randomDice = DiceManager.Instance.GetDicePrefab(diceType);
-    var data = randomDice.GetComponent<DiceData>();
-    GameData.GenerateNextDiceInputData(data);
-  }
-
   private void OnDestroy()
   {
     if (Instance == this) Instance = null;

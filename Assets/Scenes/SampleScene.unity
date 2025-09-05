@@ -3776,63 +3776,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1001 &9834955390883281
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.0025854
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.2891984
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.03692772
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613737156346769508, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2935940414799532488, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
-      propertyPath: m_Name
-      value: DiceInputManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 050aff2653facbe4ba0e386bb697a443, type: 3}
 --- !u!1001 &1345201131657247325
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4077,5 +4020,4 @@ SceneRoots:
   - {fileID: 1493537446}
   - {fileID: 952374831}
   - {fileID: 1345201131657247325}
-  - {fileID: 9834955390883281}
   - {fileID: 1759552733501622874}
