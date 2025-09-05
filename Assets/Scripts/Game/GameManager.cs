@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
   public static GameManager Instance { get; private set; }
+  public GameData GameData { get; private set; }
 
   private void Awake()
   {
@@ -16,20 +17,17 @@ public class GameManager : MonoBehaviour
     DontDestroyOnLoad(gameObject);
   }
 
-  private void Update()
+  private void Start()
   {
-    if (Input.GetKeyDown(KeyCode.Space))
-    {
-      var diceGO = DiceInputManager.Instance.CreateRandomDiceInput();
-      if (diceGO == null)
-      {
-        Debug.LogWarning("Failed to generate a random dice input.");
-        return;
-      }
+    GameData = GetComponent<GameData>();
+  }
 
-      var diceInput = diceGO.GetComponent<DiceInputData>();
-      Debug.Log($"Dice input type: {diceInput.Type}");
-    }
+  private void GenerateNextDiceInput()
+  {
+    var diceType = DiceManager.Instance.RandomDiceType();
+    var randomDice = DiceManager.Instance.GetDicePrefab(diceType);
+    var data = randomDice.GetComponent<DiceData>();
+    GameData.GenerateNextDiceInputData(data);
   }
 
   private void OnDestroy()

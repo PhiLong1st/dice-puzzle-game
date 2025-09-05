@@ -10,10 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 781131051916003785}
   - component: {fileID: 7771179419115277903}
-  - component: {fileID: 3008902416875959678}
   - component: {fileID: 4969020822055743483}
-  - component: {fileID: 8351562694804234818}
-  - component: {fileID: 6320928360671348449}
   m_Layer: 5
   m_Name: Dice
   m_TagString: Untagged
@@ -53,19 +50,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &3008902416875959678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4987398800411018667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 665cd5475092cc94a9992743d028abd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
 --- !u!114 &4969020822055743483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,30 +64,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 0
   type: 0
---- !u!114 &8351562694804234818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4987398800411018667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f6e454210bc6394aa6147689ba72e9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6320928360671348449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4987398800411018667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fa9081a6c53ec4fbce3bd039273af4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8255899570259956488
 GameObject:
   m_ObjectHideFlags: 0

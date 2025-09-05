@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Dice : MonoBehaviour
+public class DiceData : MonoBehaviour
 {
   [SerializeField] private int value;
   [SerializeField] private DiceType type;
