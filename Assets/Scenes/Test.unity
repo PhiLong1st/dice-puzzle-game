@@ -189,11 +189,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 589
+      value: 778
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -24
       objectReference: {fileID: 0}
     - target: {fileID: 781131051916003785, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -211,10 +211,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiceInput
       objectReference: {fileID: 0}
-    - target: {fileID: 6327861088063798018, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
-      propertyPath: diceContainerGO
-      value: 
-      objectReference: {fileID: 108879909}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -223,11 +219,6 @@ PrefabInstance:
 --- !u!224 &108879908 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 781131051916003785, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
-  m_PrefabInstance: {fileID: 108879907}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &108879909 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5841983373690864102, guid: c3da11832f88ec94584f67757b1d92c9, type: 3}
   m_PrefabInstance: {fileID: 108879907}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &640952126

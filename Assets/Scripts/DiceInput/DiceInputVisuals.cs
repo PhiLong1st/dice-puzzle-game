@@ -8,7 +8,6 @@ public class DiceInputVisuals : MonoBehaviour
 
   private GridLayoutGroup gridLayoutGroup;
   private CanvasRenderer canvasRenderer;
-  private Image bgImage;
 
   private void Start()
   {
@@ -22,8 +21,5 @@ public class DiceInputVisuals : MonoBehaviour
 
     canvasRenderer = visual.gameObject.AddComponent<CanvasRenderer>();
     canvasRenderer.cullTransparentMesh = true;
-
-    bgImage = visual.gameObject.AddComponent<Image>();
-    bgImage.GetComponent<Image>().color = new Color32(0, 0, 0, 105);
   }
 }

@@ -28,7 +28,9 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     {
       for (int c = 0; c < cols; ++c)
       {
-        diceSlotGrid[r, c] = Instantiate(diceSlotPrefab).GetComponent<DiceSlot>();
+        var clonedDiceSlot = Instantiate(diceSlotPrefab);
+        clonedDiceSlot.gameObject.name += $"_{r}_{c}";
+        diceSlotGrid[r, c] = clonedDiceSlot.GetComponent<DiceSlot>();
         diceSlotGrid[r, c].SetCoordinates(r, c);
         if (r == 2 && c == 2)
         {
@@ -51,73 +53,89 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     if (!diceGO) return;
 
     var diceInput = diceGO.GetComponent<DiceInput>();
-    var draggedRect = diceGO.GetComponent<RectTransform>();
-
-    Vector2 dropPos = default;
-    var isDropOk = IsFullyInsideBounds(rectTransform, draggedRect)
-                && !IsDiceCollapse(rectTransform, draggedRect, out dropPos);
-
+    var dragRect = diceGO.GetComponent<RectTransform>();
+    var isDropOk = TryDrop(rectTransform, dragRect, out Vector2 anchoredDropPos, out (int row, int col) nearestCell);
     if (!isDropOk) return;
-    diceInput.NotifyDropOk(isDropOk);
-    draggedRect.anchoredPosition = dropPos;
+    diceInput.NotifyDropOk();
+    dragRect.anchoredPosition = anchoredDropPos;
+    ApplyInputDrop(nearestCell, dragRect);
   }
 
-  private bool IsFullyInsideBounds(RectTransform container, RectTransform target)
+  private void ApplyInputDrop((int row, int col) nearestCell, RectTransform dragRect)
   {
-    Vector2 containerTopLeftCorner = container.TopLeftCorner();
-    Vector2 containerBottomRightCorner = container.BottomRightCorner();
+    Dice[,] diceInputs = dragRect.gameObject.GetComponent<DiceInput>().DiceInputs;
+    int inputRows = diceInputs.GetLength(0);
+    int inputCols = diceInputs.GetLength(1);
 
-    Vector2 topLeftCorner = target.TopLeftCorner();
-    Vector2 topRightCorner = target.TopRightCorner();
-    Vector2 bottomLeftCorner = target.BottomLeftCorner();
-    Vector2 bottomRightCorner = target.BottomRightCorner();
+    for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r)
+    {
+      for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
+      {
+        Dice diceInput = diceInputs[r - nearestCell.row, c - nearestCell.col];
+        if (diceInput.Type == DiceType.Zero) continue;
+
+        DiceSlot diceSlot = diceSlotGrid[r, c];
+        diceSlot.RemoveDice();
+        diceSlot.PlaceDice(diceInput);
+        Destroy(diceInput);
+      }
+    }
+  }
+
+  private bool TryDrop(RectTransform gridRect, RectTransform dragRect, out Vector2 anchoredDropPos, out (int row, int col) nearestCell)
+  {
+    anchoredDropPos = default;
+    nearestCell = (-1, -1);
+
+    Vector2 gridTopLeft = gridRect.TopLeftCorner();
+    Vector2 gridBottomRight = gridRect.BottomRightCorner();
+
+    Vector2 dragTopLeft = dragRect.TopLeftCorner();
+    Vector2 dragTopRight = dragRect.TopRightCorner();
+    Vector2 dragBottomLeft = dragRect.BottomLeftCorner();
+    Vector2 dragBottomRight = dragRect.BottomRightCorner();
 
     bool Inside(Vector2 p) =>
-        containerTopLeftCorner.x <= p.x && p.x <= containerBottomRightCorner.x &&
-        containerBottomRightCorner.y <= p.y && p.y <= containerTopLeftCorner.y;
+        gridTopLeft.x <= p.x && p.x <= gridBottomRight.x &&
+        gridBottomRight.y <= p.y && p.y <= gridTopLeft.y;
 
-    return Inside(topLeftCorner) && Inside(topRightCorner) && Inside(bottomLeftCorner) && Inside(bottomRightCorner);
-  }
+    bool isFullyInsideBounds = Inside(dragTopLeft) && Inside(dragTopRight)
+                            && Inside(dragBottomLeft) && Inside(dragBottomRight);
 
-  private bool IsDiceCollapse(RectTransform container, RectTransform target, out Vector2 dropPosition)
-  {
-    (int cellRow, int cellCol) cell = (-1, -1);
+    if (!isFullyInsideBounds) return false;
+
     float minimumDistance = float.MaxValue;
-    Vector2 containerTopLeftCorner = container.TopLeftCorner();
-    Vector2 targerTopLeftCorner = target.TopLeftCorner();
-    dropPosition = new Vector2();
-
     for (int r = 0; r < rows; ++r)
     {
       for (int c = 0; c < cols; ++c)
       {
-        RectTransform slotRectTransform = diceSlotGrid[r, c].GetComponent<RectTransform>();
-        Vector2 slotTopLeftCorner = containerTopLeftCorner + slotRectTransform.TopLeftCorner();
-        float distance = (targerTopLeftCorner - slotTopLeftCorner).magnitude;
+        RectTransform slotRect = diceSlotGrid[r, c].GetComponent<RectTransform>();
+        Vector2 slotTopLeft = gridTopLeft + slotRect.TopLeftCorner();
+        float distance = (dragTopLeft - slotTopLeft).magnitude;
+
         if (minimumDistance > distance)
         {
           minimumDistance = distance;
-          dropPosition = slotTopLeftCorner;
-          cell = (r, c);
+          anchoredDropPos = slotTopLeft;
+          nearestCell = (r, c);
         }
       }
     }
 
-    Dice[,] diceInputs = target.gameObject.GetComponent<DiceInput>().DiceContainer;
-
-    bool isCollapse = false;
-    int diceInputsRows = diceInputs.GetLength(0);
-    int diceInputsCols = diceInputs.GetLength(1);
-    for (int r = cell.cellRow; r < cell.cellRow + diceInputsRows; ++r)
+    Dice[,] diceInputs = dragRect.gameObject.GetComponent<DiceInput>().DiceInputs;
+    int inputRows = diceInputs.GetLength(0);
+    int inputCols = diceInputs.GetLength(1);
+    for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r)
     {
-      for (int c = cell.cellCol; c < cell.cellCol + diceInputsCols; ++c)
+      for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
-        isCollapse |= diceInputs[r - cell.cellRow, c - cell.cellCol].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
+        bool isDiceOverlaps = diceInputs[r - nearestCell.row, c - nearestCell.col].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
+        if (isDiceOverlaps) return false;
       }
     }
 
-    dropPosition.x += target.pivot.x * target.sizeDelta.x;
-    dropPosition.y -= target.pivot.y * target.sizeDelta.y;
-    return isCollapse;
+    anchoredDropPos.x += dragRect.pivot.x * dragRect.sizeDelta.x;
+    anchoredDropPos.y -= dragRect.pivot.y * dragRect.sizeDelta.y;
+    return true;
   }
 }

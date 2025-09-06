@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a11713a5bc1b14fb5653366325cf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  diceContainer: {fileID: 5841983373690864102}
+  diceContainerGO: {fileID: 5841983373690864102}
 --- !u!114 &540906885206051612
 MonoBehaviour:
   m_ObjectHideFlags: 0

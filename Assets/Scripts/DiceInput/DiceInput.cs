@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class DiceInput : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
   [SerializeField] private GameObject diceContainerGO;
-  public Dice[,] DiceContainer { get; private set; }
+  public Dice[,] DiceInputs { get; private set; }
   public event Action OnDropSuccessful;
   public bool IsDraggable { get; private set; }
   private Canvas canvas;
@@ -24,17 +24,17 @@ public class DiceInput : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
   private void BuildContainer()
   {
-    var DiceInputs = new DiceType[2, 2] { { DiceType.Zero, DiceType.One }, { DiceType.Zero, DiceType.One } };
-    int rows = DiceInputs.GetLength(0);
-    int cols = DiceInputs.GetLength(1);
+    var diceInputsMock = new DiceType[2, 2] { { DiceType.One, DiceType.One }, { DiceType.Zero, DiceType.One } };
+    int rows = diceInputsMock.GetLength(0);
+    int cols = diceInputsMock.GetLength(1);
 
-    DiceContainer = new Dice[rows, cols];
+    DiceInputs = new Dice[rows, cols];
     for (int r = 0; r < rows; ++r)
     {
       for (int c = 0; c < cols; ++c)
       {
-        GameObject dicePrefab = DiceManager.Instance.GetDicePrefab(DiceInputs[r, c]);
-        DiceContainer[r, c] = dicePrefab.GetComponent<Dice>();
+        GameObject dicePrefab = DiceManager.Instance.GetDicePrefab(diceInputsMock[r, c]);
+        DiceInputs[r, c] = dicePrefab.GetComponent<Dice>();
 
         RectTransform rectTransform = dicePrefab.GetComponent<RectTransform>();
         RectTransform containerRectTransform = diceContainerGO.GetComponent<RectTransform>();
@@ -55,18 +55,15 @@ public class DiceInput : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     initialPosition = rectTransform.anchoredPosition;
     canvasGroup.blocksRaycasts = false;
     canvasGroup.alpha = .6f;
-    Debug.Log("OnBeginDrag");
   }
 
   public void OnDrag(PointerEventData eventData)
   {
     rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-    Debug.Log("OnDrag");
   }
 
   public void OnEndDrag(PointerEventData eventData)
   {
-    Debug.Log("OnEndDrag");
     canvasGroup.blocksRaycasts = true;
     canvasGroup.alpha = 1f;
 
@@ -79,13 +76,14 @@ public class DiceInput : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
     {
       OnDropSuccessful?.Invoke();
       Debug.Log("Drop succesfull");
+      Destroy(gameObject);
       LockForDrag();
     }
   }
 
-  public void NotifyDropOk(bool isDropOk)
+  public void NotifyDropOk()
   {
-    IsDraggable = isDropOk;
+    IsDraggable = true;
   }
 
   private void LockForDrag()

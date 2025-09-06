@@ -18,8 +18,7 @@ public class DiceManager : MonoBehaviour
   [SerializeField] private DicePrefab[] dicePrefabs;
   private Dictionary<DiceType, GameObject> cachedDices;
 
-  [SerializeField] private GameObject defaultDiceGameObject;
-  public Dice DefaultDice => defaultDiceGameObject.GetComponent<Dice>();
+  public Dice DefaultDice => GetDicePrefab(DiceType.Zero).GetComponent<Dice>();
 
   private void Awake()
   {
