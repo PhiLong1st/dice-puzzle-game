@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DiceType { One = 1, Two, Three, Four, Five, Six };
+public enum DiceType { Zero = 0, One, Two, Three, Four, Five, Six };
 
 [Serializable]
 public struct DicePrefab
@@ -14,8 +14,12 @@ public struct DicePrefab
 public class DiceManager : MonoBehaviour
 {
   public static DiceManager Instance { get; private set; }
+
   [SerializeField] private DicePrefab[] dicePrefabs;
   private Dictionary<DiceType, GameObject> cachedDices;
+
+  [SerializeField] private GameObject defaultDiceGameObject;
+  public Dice DefaultDice => defaultDiceGameObject.GetComponent<Dice>();
 
   private void Awake()
   {
@@ -27,10 +31,6 @@ public class DiceManager : MonoBehaviour
 
     Instance = this;
     DontDestroyOnLoad(gameObject);
-  }
-
-  private void Start()
-  {
     BuildCachedDices();
   }
 
@@ -61,7 +61,8 @@ public class DiceManager : MonoBehaviour
       Debug.LogError($"DiceManager: No prefab registered for {diceType}.", this);
     }
 
-    return dicePrefab;
+    var clonedPrefab = Instantiate(dicePrefab);
+    return clonedPrefab;
   }
 
   public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, 7);

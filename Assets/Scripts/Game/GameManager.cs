@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     GameData = GetComponent<GameData>();
   }
 
+  public void HandleDropSuccesful()
+  {
+    //Generate new input and enqueue to queue
+  }
+
   private void OnDestroy()
   {
     if (Instance == this) Instance = null;
