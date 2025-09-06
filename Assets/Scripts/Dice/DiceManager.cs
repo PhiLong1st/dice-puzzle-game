@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DiceType { One = 1, Two, Three, Four, Five, Six };
+public enum DiceType { Zero = 0, One, Two, Three, Four, Five, Six };
 
 [Serializable]
 public struct DicePrefab
@@ -14,8 +14,11 @@ public struct DicePrefab
 public class DiceManager : MonoBehaviour
 {
   public static DiceManager Instance { get; private set; }
+
   [SerializeField] private DicePrefab[] dicePrefabs;
-  private Dictionary<DiceType, GameObject> diceDictionary;
+  private Dictionary<DiceType, GameObject> cachedDices;
+
+  public Dice DefaultDice => GetDicePrefab(DiceType.Zero).GetComponent<Dice>();
 
   private void Awake()
   {
@@ -27,35 +30,38 @@ public class DiceManager : MonoBehaviour
 
     Instance = this;
     DontDestroyOnLoad(gameObject);
+    BuildCachedDices();
   }
 
-  private void Start()
+  private void BuildCachedDices()
   {
-    diceDictionary = new();
+    cachedDices = new();
+    Debug.Log("<color=#60A5FA>DICE MANAGER: Loading dice prefabs…</color>");
     foreach (var dicePrefab in dicePrefabs)
     {
-      if (diceDictionary.ContainsKey(dicePrefab.Type)) continue;
+      if (cachedDices.ContainsKey(dicePrefab.Type)) continue;
 
       if (dicePrefab.Prefab == null)
       {
-        Debug.LogWarning($"DiceManager: Missing Prefab for ({dicePrefab.Type}).", this);
+        Debug.Log($"<color=#60A5FA>DICE MANAGER: Missing Prefab for ({dicePrefab.Type}).", this);
         continue;
       }
-
-      diceDictionary.Add(dicePrefab.Type, dicePrefab.Prefab);
+      cachedDices.Add(dicePrefab.Type, dicePrefab.Prefab);
     }
+    Debug.Log("<color=#60A5FA>DICE MANAGER: Done.</color>");
   }
 
   public GameObject GetDicePrefab(DiceType diceType)
   {
-    diceDictionary.TryGetValue(diceType, out GameObject dicePrefab);
+    cachedDices.TryGetValue(diceType, out GameObject dicePrefab);
 
     if (dicePrefab == null)
     {
       Debug.LogError($"DiceManager: No prefab registered for {diceType}.", this);
     }
 
-    return dicePrefab;
+    var clonedPrefab = Instantiate(dicePrefab);
+    return clonedPrefab;
   }
 
   public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, 7);

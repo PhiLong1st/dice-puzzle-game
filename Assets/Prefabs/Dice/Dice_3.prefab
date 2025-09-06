@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &658705373993661996
+--- !u!1001 &7601264546392783195
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -90,19 +90,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4969020822055743483, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: type
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4969020822055743483, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: value
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4987398800411018667, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Name
-      value: Dice_2
+      value: Dice_3
       objectReference: {fileID: 0}
     - target: {fileID: 7481053239957901205, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: type
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.a
@@ -110,15 +110,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.b
-      value: 0.37647066
+      value: 0.5061132
       objectReference: {fileID: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.g
-      value: 0.97026336
+      value: 0.9150943
       objectReference: {fileID: 0}
     - target: {fileID: 8558145141735024015, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
       propertyPath: m_Color.r
-      value: 0.98039216
+      value: 0.45323068
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

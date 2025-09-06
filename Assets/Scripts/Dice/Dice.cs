@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class Dice : MonoBehaviour
 {
-  [SerializeField] private int value;
   [SerializeField] private DiceType type;
-  public int Value => value;
+  public int Value => (int)type;
   public DiceType Type => type;
+
+  public void Initialize(DiceType type)
+  {
+    this.type = type;
+  }
 }

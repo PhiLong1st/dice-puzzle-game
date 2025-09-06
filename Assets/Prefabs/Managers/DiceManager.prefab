@@ -45,15 +45,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dicePrefabs:
+  - Type: 0
+    Prefab: {fileID: 4987398800411018667, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
   - Type: 1
-    Prefab: {fileID: 2795664989003427825, guid: 2fd9f917b74aecf46b2a8c7c1d510afd, type: 3}
+    Prefab: {fileID: 4199882353783980738, guid: 2fd9f917b74aecf46b2a8c7c1d510afd, type: 3}
   - Type: 2
-    Prefab: {fileID: 653299764379330539, guid: 5ba3df64b47e79a479106dacce496a89, type: 3}
+    Prefab: {fileID: 5481722718732497799, guid: 5ba3df64b47e79a479106dacce496a89, type: 3}
   - Type: 3
-    Prefab: {fileID: 6676073698070213486, guid: c890e7d50f410c242b6c2d45dba5a306, type: 3}
+    Prefab: {fileID: 3191874679920295152, guid: d32b17aa9777fb44490e8224eb36476f, type: 3}
   - Type: 4
-    Prefab: {fileID: 8663756659420237282, guid: 5e472d62c0ea1494f8fb9e9d28f2e38d, type: 3}
+    Prefab: {fileID: 121445675379435496, guid: 00e35b69132667645b050c5a7a2c12c5, type: 3}
   - Type: 5
-    Prefab: {fileID: 3748181926501581863, guid: f0c05a32e28fc8a4a8638c6aad584f6d, type: 3}
+    Prefab: {fileID: 2566906527059953798, guid: 8d2093af97c93b0428787896293f95da, type: 3}
   - Type: 6
-    Prefab: {fileID: 6420129495201551765, guid: 038efadbfe936864d801093eb66fa6a5, type: 3}
+    Prefab: {fileID: 3284524281236728278, guid: 2aa062aaf65f12145af5c113d73eed70, type: 3}
+  defaultDiceGameObject: {fileID: 4987398800411018667, guid: 8e0b2ffebbacc7f4095c96294a78dd85, type: 3}
