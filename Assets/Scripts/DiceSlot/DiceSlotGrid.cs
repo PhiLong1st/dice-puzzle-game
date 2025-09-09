@@ -102,7 +102,11 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     bool isFullyInsideBounds = Inside(dragTopLeft) && Inside(dragTopRight)
                             && Inside(dragBottomLeft) && Inside(dragBottomRight);
 
-    if (!isFullyInsideBounds) return false;
+    if (!isFullyInsideBounds)
+    {
+      Debug.Log("Fail because drop outside grid");
+      return false;
+    }
 
     float minimumDistance = float.MaxValue;
     for (int r = 0; r < rows; ++r)
@@ -130,7 +134,11 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
         bool isDiceOverlaps = diceInputs[r - nearestCell.row, c - nearestCell.col].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
-        if (isDiceOverlaps) return false;
+        if (isDiceOverlaps)
+        {
+          Debug.Log("Fail because drop overlap other dice in grid");
+          return false;
+        }
       }
     }
 

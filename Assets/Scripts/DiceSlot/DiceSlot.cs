@@ -28,12 +28,10 @@ public class DiceSlot : MonoBehaviour
     diceRectTransform.pivot = new Vector2(0.5f, 0.5f);
     diceRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
     diceRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-    Debug.Log($"Placed {Dice.Type} dice at slot[{AtRow},{AtCol}].");
   }
 
   public void RemoveDice()
   {
     Destroy(Dice.gameObject);
-    Debug.Log($"Cleared Slot[{AtRow},{AtCol}].");
   }
 }
