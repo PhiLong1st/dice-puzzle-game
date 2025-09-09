@@ -36,19 +36,17 @@ public class DiceManager : MonoBehaviour
   private void BuildCachedDices()
   {
     cachedDices = new();
-    Debug.Log("<color=#60A5FA>DICE MANAGER: Loading dice prefabs…</color>");
     foreach (var dicePrefab in dicePrefabs)
     {
       if (cachedDices.ContainsKey(dicePrefab.Type)) continue;
 
       if (dicePrefab.Prefab == null)
       {
-        Debug.Log($"<color=#60A5FA>DICE MANAGER: Missing Prefab for ({dicePrefab.Type}).", this);
+        Debug.LogError($"DICE MANAGER: Missing Prefab for ({dicePrefab.Type}).", this);
         continue;
       }
       cachedDices.Add(dicePrefab.Type, dicePrefab.Prefab);
     }
-    Debug.Log("<color=#60A5FA>DICE MANAGER: Done.</color>");
   }
 
   public GameObject GetDicePrefab(DiceType diceType)
@@ -57,12 +55,12 @@ public class DiceManager : MonoBehaviour
 
     if (dicePrefab == null)
     {
-      Debug.LogError($"DiceManager: No prefab registered for {diceType}.", this);
+      Debug.LogError($"DICE MANAGER: No prefab registered for {diceType}.", this);
     }
 
     var clonedPrefab = Instantiate(dicePrefab);
     return clonedPrefab;
   }
 
-  public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, 7);
+  public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, Enum.GetValues(typeof(DiceType)).Length + 1);
 }
