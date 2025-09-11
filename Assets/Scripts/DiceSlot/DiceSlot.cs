@@ -3,7 +3,7 @@ public class DiceSlot : MonoBehaviour
 {
   public int AtRow { get; private set; }
   public int AtCol { get; private set; }
-  public Dice Dice { get; private set; }
+  public Dice? Dice { get; private set; }
   public bool HasDice() => Dice != null;
 
   private RectTransform rectTransform;
@@ -32,6 +32,11 @@ public class DiceSlot : MonoBehaviour
 
   public void RemoveDice()
   {
+    if (!HasDice())
+    {
+      return;
+    }
+
     Destroy(Dice.gameObject);
   }
 }

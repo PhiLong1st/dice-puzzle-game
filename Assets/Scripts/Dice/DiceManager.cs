@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DiceType { Zero = 0, One, Two, Three, Four, Five, Six };
+public enum DiceType { One, Two, Three, Four, Five, Six };
 
 [Serializable]
 public struct DicePrefab
@@ -17,8 +17,6 @@ public class DiceManager : MonoBehaviour
 
   [SerializeField] private DicePrefab[] dicePrefabs;
   private Dictionary<DiceType, GameObject> cachedDices;
-
-  public Dice DefaultDice => GetDicePrefab(DiceType.Zero).GetComponent<Dice>();
 
   private void Awake()
   {

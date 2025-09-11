@@ -33,8 +33,8 @@ public class IncomingDiceVisual : MonoBehaviour
     int rows = incomingDice.IncomingDices.GetLength(0);
     int cols = incomingDice.IncomingDices.GetLength(1);
 
-    float width = rows * DiceCellSize.x + (rows - 1) * DiceCellSpacing.x;
-    float height = cols * DiceCellSize.y + (cols - 1) * DiceCellSpacing.y;
+    float height = rows * DiceCellSize.x + (rows - 1) * DiceCellSpacing.x;
+    float width = cols * DiceCellSize.y + (cols - 1) * DiceCellSpacing.y;
 
     rectTransform.sizeDelta = new Vector2(width, height);
     rectTransform.pivot = new Vector2(0.5f, 0.5f);

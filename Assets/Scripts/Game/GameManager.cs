@@ -4,9 +4,19 @@ public class GameManager : MonoBehaviour
 {
   public static GameManager Instance { get; private set; }
   public GameData GameData { get; private set; }
+  private Canvas canvas;
+
+
+  [SerializeField] private GameObject DiceInputGO;
 
   private void Awake()
   {
+    GameData = GetComponent<GameData>();
+
+    if (canvas == null) canvas = GetComponentInParent<Canvas>();
+    if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
+    if (canvas == null) Debug.LogError("No Canvas found for DiceInput.", this);
+
     if (Instance != null && Instance != this)
     {
       Destroy(gameObject);
@@ -19,16 +29,36 @@ public class GameManager : MonoBehaviour
 
   private void Start()
   {
-    GameData = GetComponent<GameData>();
+    Initialze();
   }
 
-  public void HandleDropSuccesful()
+  public void Initialze()
   {
-    //Generate new input and enqueue to queue
+    GameData.CurrentDiceInput = GenerateIncomingDice();
+    GameData.CurrentDiceInput.UnlockForDrag();
+
+    GameData.NextDiceInput = GenerateIncomingDice();
+
+    GameData.CurrentDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.CurrentDiceInputGOPosition;
+    GameData.NextDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.NextDiceInputGOPosition;
   }
 
-  private void OnDestroy()
+  public void GenerateNewInput()
   {
-    if (Instance == this) Instance = null;
+    GameData.CurrentDiceInput = GameData.NextDiceInput;
+    GameData.CurrentDiceInput.UnlockForDrag();
+
+    GameData.NextDiceInput = GenerateIncomingDice();
+
+    GameData.CurrentDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.CurrentDiceInputGOPosition;
+    GameData.NextDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.NextDiceInputGOPosition;
+  }
+
+  private IncomingDice GenerateIncomingDice()
+  {
+    IncomingDice incomingDice = IncomingDiceManager.Instance.RandomIncomingDice();
+    incomingDice.LockForDrag();
+    incomingDice.OnDropSuccessful += GenerateNewInput;
+    return incomingDice;
   }
 }

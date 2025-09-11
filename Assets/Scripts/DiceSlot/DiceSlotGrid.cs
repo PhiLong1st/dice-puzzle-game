@@ -36,10 +36,6 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
         {
           diceSlotGrid[r, c].PlaceDice(DiceManager.Instance.GetDicePrefab(DiceType.Six).GetComponent<Dice>());
         }
-        else
-        {
-          diceSlotGrid[r, c].PlaceDice(DiceManager.Instance.DefaultDice);
-        }
 
         var goRect = diceSlotGrid[r, c].GetComponent<RectTransform>();
         goRect.SetParent(rectTransform, worldPositionStays: false);
@@ -63,7 +59,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
 
   private void ApplyInputDrop((int row, int col) nearestCell, RectTransform dragRect)
   {
-    Dice[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
+    Dice?[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
     int inputRows = incomingDices.GetLength(0);
     int inputCols = incomingDices.GetLength(1);
 
@@ -71,8 +67,8 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
-        Dice diceInput = incomingDices[r - nearestCell.row, c - nearestCell.col];
-        if (diceInput.Type == DiceType.Zero) continue;
+        Dice? diceInput = incomingDices[r - nearestCell.row, c - nearestCell.col];
+        if (diceInput == null) continue;
 
         DiceSlot diceSlot = diceSlotGrid[r, c];
         diceSlot.RemoveDice();
@@ -134,7 +130,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
-        bool isDiceOverlaps = incomingDices[r - nearestCell.row, c - nearestCell.col].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
+        bool isDiceOverlaps = incomingDices[r - nearestCell.row, c - nearestCell.col] != null && diceSlotGrid[r, c].Dice != null;
         if (isDiceOverlaps)
         {
           Debug.Log("Fail because drop overlap other dice in grid");

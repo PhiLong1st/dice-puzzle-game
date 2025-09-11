@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,7 +7,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(RectTransform))]
 public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-  public Dice[,] IncomingDices { get; private set; }
+  public Dice?[,] IncomingDices { get; private set; }
 
   private Canvas canvas;
   private RectTransform rectTransform;
@@ -16,7 +17,6 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
   public event Action OnDropSuccessful;
 
   private Vector2 initialPosition;
-  private DiceType[,] dataGrid;
   private IncomingDiceVisual visual;
 
   private void Awake()
@@ -40,18 +40,19 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     canvasGroup.blocksRaycasts = true;
   }
 
-  public void Initialze(DiceType[,] diceTypes)
+  public void Initialze(DiceType?[,] diceTypes)
   {
-    dataGrid = diceTypes;
-    int rows = dataGrid.GetLength(0);
-    int cols = dataGrid.GetLength(1);
+    int rows = diceTypes.GetLength(0);
+    int cols = diceTypes.GetLength(1);
 
-    IncomingDices = new Dice[rows, cols];
+    IncomingDices = new Dice?[rows, cols];
     for (int r = 0; r < rows; ++r)
     {
       for (int c = 0; c < cols; ++c)
       {
-        GameObject dicePrefab = DiceManager.Instance.GetDicePrefab(dataGrid[r, c]);
+        if (diceTypes[r, c] == null) continue;
+
+        GameObject dicePrefab = DiceManager.Instance.GetDicePrefab(diceTypes[r, c].Value);
         IncomingDices[r, c] = dicePrefab.GetComponent<Dice>();
 
         RectTransform prefabRect = dicePrefab.GetComponent<RectTransform>();
@@ -60,8 +61,6 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     }
 
     visual.Initilize();
-
-    OnDropSuccessful += GameManager.Instance.GenerateNewInput;
   }
 
   public void OnBeginDrag(PointerEventData eventData)
@@ -97,5 +96,17 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
   public void NotifyDropSuccessful()
   {
     IsDropSuccessful = true;
+  }
+
+  public void LockForDrag()
+  {
+    enabled = false;
+    canvasGroup.blocksRaycasts = false;
+  }
+
+  public void UnlockForDrag()
+  {
+    enabled = true;
+    canvasGroup.blocksRaycasts = true;
   }
 }
