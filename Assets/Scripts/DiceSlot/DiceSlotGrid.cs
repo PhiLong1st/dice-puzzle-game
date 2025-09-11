@@ -52,26 +52,26 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
     var diceGO = eventData.pointerDrag;
     if (!diceGO) return;
 
-    var diceInput = diceGO.GetComponent<DiceInput>();
+    var diceInput = diceGO.GetComponent<IncomingDice>();
     var dragRect = diceGO.GetComponent<RectTransform>();
     var isDropOk = TryDrop(rectTransform, dragRect, out Vector2 anchoredDropPos, out (int row, int col) nearestCell);
     if (!isDropOk) return;
-    diceInput.NotifyDropOk();
+    diceInput.NotifyDropSuccessful();
     dragRect.anchoredPosition = anchoredDropPos;
     ApplyInputDrop(nearestCell, dragRect);
   }
 
   private void ApplyInputDrop((int row, int col) nearestCell, RectTransform dragRect)
   {
-    Dice[,] diceInputs = dragRect.gameObject.GetComponent<DiceInput>().DiceInputs;
-    int inputRows = diceInputs.GetLength(0);
-    int inputCols = diceInputs.GetLength(1);
+    Dice[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
+    int inputRows = incomingDices.GetLength(0);
+    int inputCols = incomingDices.GetLength(1);
 
     for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r)
     {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
-        Dice diceInput = diceInputs[r - nearestCell.row, c - nearestCell.col];
+        Dice diceInput = incomingDices[r - nearestCell.row, c - nearestCell.col];
         if (diceInput.Type == DiceType.Zero) continue;
 
         DiceSlot diceSlot = diceSlotGrid[r, c];
@@ -126,14 +126,15 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler
       }
     }
 
-    Dice[,] diceInputs = dragRect.gameObject.GetComponent<DiceInput>().DiceInputs;
-    int inputRows = diceInputs.GetLength(0);
-    int inputCols = diceInputs.GetLength(1);
+    Dice[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
+    int inputRows = incomingDices.GetLength(0);
+    int inputCols = incomingDices.GetLength(1);
+
     for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r)
     {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c)
       {
-        bool isDiceOverlaps = diceInputs[r - nearestCell.row, c - nearestCell.col].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
+        bool isDiceOverlaps = incomingDices[r - nearestCell.row, c - nearestCell.col].Type != DiceType.Zero && diceSlotGrid[r, c].Dice.Type != DiceType.Zero;
         if (isDiceOverlaps)
         {
           Debug.Log("Fail because drop overlap other dice in grid");

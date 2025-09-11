@@ -61,6 +61,4 @@ public class DiceManager : MonoBehaviour
     var clonedPrefab = Instantiate(dicePrefab);
     return clonedPrefab;
   }
-
-  public DiceType RandomDiceType() => (DiceType)UnityEngine.Random.Range(1, Enum.GetValues(typeof(DiceType)).Length + 1);
 }
