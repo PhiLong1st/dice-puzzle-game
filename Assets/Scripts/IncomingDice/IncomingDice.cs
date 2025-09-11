@@ -109,4 +109,40 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     enabled = true;
     canvasGroup.blocksRaycasts = true;
   }
+
+  public void RotateRight()
+  {
+    int rows = IncomingDices.GetLength(0);
+    int cols = IncomingDices.GetLength(1);
+
+    Dice?[,] rotated = new Dice?[cols, rows];
+    for (int r = 0; r < rows; ++r)
+    {
+      for (int c = 0; c < cols; ++c)
+      {
+        rotated[c, rows - r - 1] = IncomingDices[r, c];
+      }
+    }
+
+    IncomingDices = rotated;
+    visual.RotateRight();
+  }
+
+  public void RotateLeft()
+  {
+    int rows = IncomingDices.GetLength(0);
+    int cols = IncomingDices.GetLength(1);
+
+    Dice?[,] rotated = new Dice?[cols, rows];
+    for (int r = 0; r < rows; ++r)
+    {
+      for (int c = 0; c < cols; ++c)
+      {
+        rotated[cols - 1 - c, r] = IncomingDices[r, c];
+      }
+    }
+
+    IncomingDices = rotated;
+    visual.RotateLeft();
+  }
 }

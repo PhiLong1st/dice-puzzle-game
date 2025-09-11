@@ -35,6 +35,8 @@ public class IncomingDiceManager : MonoBehaviour
       RandomIncomingDice();
       Debug.Log("Random successfully!");
     }
+
+
   }
 
   public IncomingDice RandomIncomingDice()

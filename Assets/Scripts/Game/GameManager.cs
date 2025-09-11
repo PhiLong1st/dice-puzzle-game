@@ -32,6 +32,21 @@ public class GameManager : MonoBehaviour
     Initialze();
   }
 
+  private void Update()
+  {
+    if (Input.GetKeyDown(KeyCode.RightArrow))
+    {
+      GameData.CurrentDiceInput.RotateRight();
+      Debug.Log("Rotate right successfully!");
+    }
+
+    if (Input.GetKeyDown(KeyCode.LeftArrow))
+    {
+      GameData.CurrentDiceInput.RotateLeft();
+      Debug.Log("Rotate left successfully!");
+    }
+  }
+
   public void Initialze()
   {
     GameData.CurrentDiceInput = GenerateIncomingDice();

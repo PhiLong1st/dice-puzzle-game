@@ -41,4 +41,7 @@ public class IncomingDiceVisual : MonoBehaviour
     rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
     rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
   }
+
+  public void RotateLeft() => rectTransform.Rotate(Vector3.forward, 90f, Space.Self);
+  public void RotateRight() => rectTransform.Rotate(Vector3.forward, -90f, Space.Self);
 }
