@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(GridLayoutGroup))]
-public class IncomingDiceVisual : MonoBehaviour
-{
+public class IncomingDiceVisual : MonoBehaviour {
   public readonly Vector2 DiceCellSize = new Vector2(100f, 100f);
   public readonly Vector2 DiceCellSpacing = new Vector2(5f, 5f);
 
@@ -12,15 +11,13 @@ public class IncomingDiceVisual : MonoBehaviour
   private GridLayoutGroup gridLayoutGroup;
   private RectTransform rectTransform;
 
-  private void Awake()
-  {
+  private void Awake() {
     gridLayoutGroup = GetComponent<GridLayoutGroup>();
     incomingDice = GetComponent<IncomingDice>();
     rectTransform = GetComponent<RectTransform>();
   }
 
-  public void Initilize()
-  {
+  public void Initilize() {
     gridLayoutGroup.cellSize = DiceCellSize;
     gridLayoutGroup.spacing = DiceCellSpacing;
 

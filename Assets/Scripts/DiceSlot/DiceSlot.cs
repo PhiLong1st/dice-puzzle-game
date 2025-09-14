@@ -1,6 +1,5 @@
 using UnityEngine;
-public class DiceSlot : MonoBehaviour
-{
+public class DiceSlot : MonoBehaviour {
   public int AtRow { get; private set; }
   public int AtCol { get; private set; }
   public Dice? Dice { get; private set; }
@@ -8,19 +7,16 @@ public class DiceSlot : MonoBehaviour
 
   private RectTransform rectTransform;
 
-  private void Awake()
-  {
+  private void Awake() {
     rectTransform = GetComponent<RectTransform>();
   }
 
-  public void SetCoordinates(int row, int col)
-  {
+  public void SetCoordinates(int row, int col) {
     AtRow = row;
     AtCol = col;
   }
 
-  public void PlaceDice(Dice dice)
-  {
+  public void PlaceDice(Dice dice) {
     Dice = dice;
     RectTransform diceRectTransform = dice.GetComponent<RectTransform>();
     diceRectTransform.SetParent(rectTransform, worldPositionStays: false);
@@ -30,10 +26,8 @@ public class DiceSlot : MonoBehaviour
     diceRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
   }
 
-  public void RemoveDice()
-  {
-    if (!HasDice())
-    {
+  public void RemoveDice() {
+    if (!HasDice()) {
       return;
     }
 

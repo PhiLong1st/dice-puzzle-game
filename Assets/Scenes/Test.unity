@@ -553,6 +553,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DiceManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5728306900210782507, guid: 2d41eb97e8f420440a4d9c5437e24dcd, type: 3}
+      propertyPath: EmptyDicePrefab
+      value: 
+      objectReference: {fileID: 4987398800411018667, guid: eae917f32a824894480fed4544a4c476, type: 3}
+    - target: {fileID: 5728306900210782507, guid: 2d41eb97e8f420440a4d9c5437e24dcd, type: 3}
+      propertyPath: emptyDicePrefab
+      value: 
+      objectReference: {fileID: 4987398800411018667, guid: eae917f32a824894480fed4544a4c476, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

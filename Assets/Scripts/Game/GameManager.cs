@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour {
   public static GameManager Instance { get; private set; }
   public GameData GameData { get; private set; }
   private Canvas canvas;
@@ -9,16 +8,17 @@ public class GameManager : MonoBehaviour
 
   [SerializeField] private GameObject DiceInputGO;
 
-  private void Awake()
-  {
+  private void Awake() {
     GameData = GetComponent<GameData>();
 
-    if (canvas == null) canvas = GetComponentInParent<Canvas>();
-    if (canvas == null) canvas = FindFirstObjectByType<Canvas>();
-    if (canvas == null) Debug.LogError("No Canvas found for DiceInput.", this);
+    if (canvas == null)
+      canvas = GetComponentInParent<Canvas>();
+    if (canvas == null)
+      canvas = FindFirstObjectByType<Canvas>();
+    if (canvas == null)
+      Debug.LogError("No Canvas found for DiceInput.", this);
 
-    if (Instance != null && Instance != this)
-    {
+    if (Instance != null && Instance != this) {
       Destroy(gameObject);
       return;
     }
@@ -27,28 +27,23 @@ public class GameManager : MonoBehaviour
     DontDestroyOnLoad(gameObject);
   }
 
-  private void Start()
-  {
+  private void Start() {
     Initialze();
   }
 
-  private void Update()
-  {
-    if (Input.GetKeyDown(KeyCode.RightArrow))
-    {
+  private void Update() {
+    if (Input.GetKeyDown(KeyCode.RightArrow)) {
       GameData.CurrentDiceInput.RotateRight();
       Debug.Log("Rotate right successfully!");
     }
 
-    if (Input.GetKeyDown(KeyCode.LeftArrow))
-    {
+    if (Input.GetKeyDown(KeyCode.LeftArrow)) {
       GameData.CurrentDiceInput.RotateLeft();
       Debug.Log("Rotate left successfully!");
     }
   }
 
-  public void Initialze()
-  {
+  public void Initialze() {
     GameData.CurrentDiceInput = GenerateIncomingDice();
     GameData.CurrentDiceInput.UnlockForDrag();
 
@@ -58,8 +53,7 @@ public class GameManager : MonoBehaviour
     GameData.NextDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.NextDiceInputGOPosition;
   }
 
-  public void GenerateNewInput()
-  {
+  public void GenerateNewInput() {
     GameData.CurrentDiceInput = GameData.NextDiceInput;
     GameData.CurrentDiceInput.UnlockForDrag();
 
@@ -69,8 +63,7 @@ public class GameManager : MonoBehaviour
     GameData.NextDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.NextDiceInputGOPosition;
   }
 
-  private IncomingDice GenerateIncomingDice()
-  {
+  private IncomingDice GenerateIncomingDice() {
     IncomingDice incomingDice = IncomingDiceManager.Instance.RandomIncomingDice();
     incomingDice.LockForDrag();
     incomingDice.OnDropSuccessful += GenerateNewInput;

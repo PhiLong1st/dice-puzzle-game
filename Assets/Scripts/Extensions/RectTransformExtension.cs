@@ -1,16 +1,14 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RectCornerLocator
-{
+public class RectCornerLocator {
   public enum Horizontal { Left, Right }
   public enum Vertical { Down, Up }
 
   private static int Sign(Horizontal d) => d == Horizontal.Left ? -1 : +1;
   private static int Sign(Vertical d) => d == Vertical.Down ? -1 : +1;
 
-  public static Vector2 GetCornerPosition(RectTransform rt, Horizontal x, Vertical y)
-  {
+  public static Vector2 GetCornerPosition(RectTransform rt, Horizontal x, Vertical y) {
     Vector2 p = rt.anchoredPosition;
     p.x += Sign(x) * rt.pivot.x * rt.sizeDelta.x;
     p.y += Sign(y) * rt.pivot.y * rt.sizeDelta.y;
@@ -18,8 +16,7 @@ public class RectCornerLocator
   }
 }
 
-public static class RectTransformExtensions
-{
+public static class RectTransformExtensions {
   public static Vector2 GetCorner(this RectTransform rt, RectCornerLocator.Horizontal x, RectCornerLocator.Vertical y)
       => RectCornerLocator.GetCornerPosition(rt, x, y);
 
