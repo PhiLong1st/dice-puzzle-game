@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,7 +8,8 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
   [SerializeField] public int cols;
   public int Rows => rows;
   public int Cols => cols;
-  private DiceSlot[,] diceSlotGrid;
+  public DiceSlot[,] Slots;
+  public Dice?[,] Dices { get; private set; }
 
   [SerializeField] private GameObject diceSlotPrefab;
   private RectTransform rectTransform;
@@ -21,18 +23,16 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
     if (!diceSlotPrefab)
       return;
 
-    diceSlotGrid = new DiceSlot[rows, cols];
+    Slots = new DiceSlot[rows, cols];
+    Dices = new Dice?[rows, cols];
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
         var clonedDiceSlot = Instantiate(diceSlotPrefab);
         clonedDiceSlot.gameObject.name += $"_{r}_{c}";
-        diceSlotGrid[r, c] = clonedDiceSlot.GetComponent<DiceSlot>();
-        diceSlotGrid[r, c].SetCoordinates(r, c);
-        if (r == 2 && c == 2) {
-          diceSlotGrid[r, c].PlaceDice(DiceManager.Instance.GetDicePrefab(DiceType.Six).GetComponent<Dice>());
-        }
+        Slots[r, c] = clonedDiceSlot.GetComponent<DiceSlot>();
+        Slots[r, c].SetCoordinates(r, c);
 
-        var goRect = diceSlotGrid[r, c].GetComponent<RectTransform>();
+        var goRect = Slots[r, c].GetComponent<RectTransform>();
         goRect.SetParent(rectTransform, worldPositionStays: false);
       }
     }
@@ -58,19 +58,22 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
     int inputRows = incomingDices.GetLength(0);
     int inputCols = incomingDices.GetLength(1);
 
+    List<(int, int)> incomingDiceLst = new();
     for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r) {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c) {
         Dice? diceInput = incomingDices[r - nearestCell.row, c - nearestCell.col];
+        Dices[r, c] = diceInput;
 
         if (diceInput == null)
           continue;
 
-        DiceSlot diceSlot = diceSlotGrid[r, c];
+        DiceSlot diceSlot = Slots[r, c];
         diceSlot.RemoveDice();
         diceSlot.PlaceDice(diceInput);
-        Destroy(diceInput);
+        incomingDiceLst.Add((r, c));
       }
     }
+    GameManager.Instance.HandleAfterDrop(incomingDiceLst);
   }
 
   private bool TryDrop(RectTransform gridRect, RectTransform dragRect, out Vector2 anchoredDropPos, out (int row, int col) nearestCell) {
@@ -100,7 +103,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
     float minimumDistance = float.MaxValue;
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
-        RectTransform slotRect = diceSlotGrid[r, c].GetComponent<RectTransform>();
+        RectTransform slotRect = Slots[r, c].GetComponent<RectTransform>();
         Vector2 slotTopLeft = gridTopLeft + slotRect.TopLeftCorner();
         float distance = (dragTopLeft - slotTopLeft).magnitude;
 
@@ -118,7 +121,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
 
     for (int r = nearestCell.row; r < nearestCell.row + inputRows; ++r) {
       for (int c = nearestCell.col; c < nearestCell.col + inputCols; ++c) {
-        bool isDiceOverlaps = incomingDices[r - nearestCell.row, c - nearestCell.col] != null && diceSlotGrid[r, c].Dice != null;
+        bool isDiceOverlaps = incomingDices[r - nearestCell.row, c - nearestCell.col] != null && Slots[r, c].Dice != null;
         if (isDiceOverlaps) {
           Debug.Log("Fail because drop overlap other dice in grid");
           return false;

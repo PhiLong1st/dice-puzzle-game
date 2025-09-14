@@ -18,6 +18,9 @@ public class DiceSlot : MonoBehaviour {
 
   public void PlaceDice(Dice dice) {
     Dice = dice;
+    if (dice == null) {
+      Debug.Log("Dice is null!");
+    }
     RectTransform diceRectTransform = dice.GetComponent<RectTransform>();
     diceRectTransform.SetParent(rectTransform, worldPositionStays: false);
     diceRectTransform.anchoredPosition = Vector2.zero;

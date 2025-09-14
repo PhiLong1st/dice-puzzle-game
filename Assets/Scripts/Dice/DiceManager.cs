@@ -53,4 +53,38 @@ public class DiceManager : MonoBehaviour {
     var clonedPrefab = Instantiate(dicePrefab);
     return clonedPrefab;
   }
+
+  public DiceType? GetNextDiceType(DiceType diceType) {
+    switch (diceType) {
+      case DiceType.One:
+        return DiceType.Two;
+      case DiceType.Two:
+        return DiceType.Three;
+      case DiceType.Three:
+        return DiceType.Four;
+      case DiceType.Four:
+        return DiceType.Five;
+      case DiceType.Five:
+        return DiceType.Six;
+      case DiceType.Six:
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  public Dice? GetNextDice(DiceType diceType) {
+    Debug.Log("here");
+    DiceType? nextDiceType = GetNextDiceType(diceType);
+    if (nextDiceType == null)
+      return null;
+
+    cachedDices.TryGetValue(nextDiceType.Value, out GameObject dicePrefab);
+
+    if (dicePrefab == null) {
+      Debug.LogError($"DICE MANAGER: No prefab registered for {diceType}.", this);
+    }
+
+    return Instantiate(dicePrefab).GetComponent<Dice>();
+  }
 }
