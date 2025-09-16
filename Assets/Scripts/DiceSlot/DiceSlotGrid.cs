@@ -54,7 +54,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
   }
 
   private void ApplyInputDrop((int row, int col) nearestCell, RectTransform dragRect) {
-    Dice?[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
+    Dice?[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().Dices;
     int inputRows = incomingDices.GetLength(0);
     int inputCols = incomingDices.GetLength(1);
 
@@ -115,7 +115,7 @@ public class DiceSlotGrid : MonoBehaviour, IDropHandler {
       }
     }
 
-    Dice[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().IncomingDices;
+    Dice[,] incomingDices = dragRect.gameObject.GetComponent<IncomingDice>().Dices;
     int inputRows = incomingDices.GetLength(0);
     int inputCols = incomingDices.GetLength(1);
 

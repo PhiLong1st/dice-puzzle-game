@@ -27,8 +27,8 @@ public class IncomingDiceVisual : MonoBehaviour {
 
     gridLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
 
-    int rows = incomingDice.IncomingDices.GetLength(0);
-    int cols = incomingDice.IncomingDices.GetLength(1);
+    int rows = incomingDice.Dices.GetLength(0);
+    int cols = incomingDice.Dices.GetLength(1);
 
     float height = rows * DiceCellSize.x + (rows - 1) * DiceCellSpacing.x;
     float width = cols * DiceCellSize.y + (cols - 1) * DiceCellSpacing.y;

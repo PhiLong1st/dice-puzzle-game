@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(CanvasGroup))]
 [RequireComponent(typeof(RectTransform))]
 public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
-  public Dice?[,] IncomingDices { get; private set; }
+  public Dice?[,] Dices { get; private set; }
 
   private Canvas canvas;
   private RectTransform rectTransform;
@@ -41,7 +41,7 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
     int rows = diceTypes.GetLength(0);
     int cols = diceTypes.GetLength(1);
 
-    IncomingDices = new Dice?[rows, cols];
+    Dices = new Dice?[rows, cols];
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
         if (diceTypes[r, c] == null) {
@@ -51,7 +51,7 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
         }
 
         GameObject dicePrefab = DiceManager.Instance.GetDicePrefab(diceTypes[r, c].Value);
-        IncomingDices[r, c] = dicePrefab.GetComponent<Dice>();
+        Dices[r, c] = dicePrefab.GetComponent<Dice>();
 
         RectTransform prefabRect = dicePrefab.GetComponent<RectTransform>();
         prefabRect.SetParent(rectTransform, worldPositionStays: false);
@@ -101,32 +101,32 @@ public class IncomingDice : MonoBehaviour, IBeginDragHandler, IEndDragHandler, I
   }
 
   public void RotateRight() {
-    int rows = IncomingDices.GetLength(0);
-    int cols = IncomingDices.GetLength(1);
+    int rows = Dices.GetLength(0);
+    int cols = Dices.GetLength(1);
 
     Dice?[,] rotated = new Dice?[cols, rows];
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
-        rotated[c, rows - r - 1] = IncomingDices[r, c];
+        rotated[c, rows - r - 1] = Dices[r, c];
       }
     }
 
-    IncomingDices = rotated;
+    Dices = rotated;
     visual.RotateRight();
   }
 
   public void RotateLeft() {
-    int rows = IncomingDices.GetLength(0);
-    int cols = IncomingDices.GetLength(1);
+    int rows = Dices.GetLength(0);
+    int cols = Dices.GetLength(1);
 
     Dice?[,] rotated = new Dice?[cols, rows];
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
-        rotated[cols - 1 - c, r] = IncomingDices[r, c];
+        rotated[cols - 1 - c, r] = Dices[r, c];
       }
     }
 
-    IncomingDices = rotated;
+    Dices = rotated;
     visual.RotateLeft();
   }
 }
