@@ -19,8 +19,8 @@ public class DiceGrid : BaseGrid, IDropHandler {
     int dropCol = (int)(Mathf.Abs(gridTopLeftWorld.x - anchorCellCenterWorld.x) / (int)cellSize.x);
     Debug.Log($"Start drop at [{dropRow}, {dropCol}]");
 
-    var incomingDice = draggedGO.GetComponent<IncomingDice>();
-    Dice?[,] incomingDices = draggedGO.GetComponent<IncomingDice>().Dices;
+    var incomingDice = draggedGO.GetComponent<IncomingDiceGrid>();
+    Dice?[,] incomingDices = draggedGO.GetComponent<IncomingDiceGrid>().Dices;
 
     for (int r = 0; r < incomingDices.GetLength(0); ++r) {
       for (int c = 0; c < incomingDices.GetLength(1); ++c) {

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(CanvasGroup))]
 public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, IDragHandler {
   public bool IsDropSuccessful { get; private set; }
-
+  public Action OnDropSuccessful;
   private Canvas canvas;
   private CanvasGroup canvasGroup;
   private Vector2 initialPosition;
@@ -19,6 +19,10 @@ public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, ID
       canvas = FindFirstObjectByType<Canvas>();
     if (canvas == null)
       Debug.LogError("No Canvas found for DiceInput.", this);
+  }
+
+  protected override void OnStart() {
+
   }
 
   public void OnBeginDrag(PointerEventData eventData) {

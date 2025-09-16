@@ -52,8 +52,8 @@ MonoBehaviour:
   backgroundColor:
     serializedVersion: 2
     rgba: 1762921010
-  rows: 5
-  cols: 5
+  rows: 2
+  cols: 2
   cellSize: {x: 100, y: 100}
   cellGridPrefab: {fileID: 2335341650977702721, guid: cbb59067669643b4dac23bac9de5df32, type: 3}
 --- !u!225 &2224663987073456831

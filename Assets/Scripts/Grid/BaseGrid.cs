@@ -20,8 +20,9 @@ public abstract class BaseGrid : MonoBehaviour {
   protected const int MaxDim = 10;
   protected const float MinCellSize = 1f;
   protected const float MinSpacing = 0f;
-  protected Dice?[,] Dices { get; private set; }
 
+  public Dice?[,] Dices { get; private set; }
+  protected DiceType?[,] DiceTypes { get; private set; }
 
   [Header("Grid")]
   [SerializeField] protected Color32 backgroundColor = new Color32(50, 10, 20, 105);
@@ -67,38 +68,23 @@ public abstract class BaseGrid : MonoBehaviour {
 
     ApplySettings();
     BuildGrid();
+
+    OnStart();
   }
   #endregion
 
   #region Virtual Functions
   protected virtual void OnAwake() { }
+  protected virtual void OnStart() { }
   #endregion
 
   #region Grid Functions
-  protected void InitializeGrid(DiceType?[,] diceTypes) {
-    int initGridRows = diceTypes.GetLength(0);
-    int initGridCols = diceTypes.GetLength(1);
-
-    if (initGridRows != rows || initGridCols != cols) {
-      Debug.LogError("Data grid is not the same dimension!");
+  public void InitializeGrid(DiceType?[,] diceTypes) {
+    if (diceTypes == null) {
       return;
     }
 
-    for (int r = 0; r < initGridRows; ++r) {
-      for (int c = 0; c < initGridCols; ++c) {
-        if (!diceTypes[r, c].HasValue) {
-          continue;
-        }
-
-        var diceType = diceTypes[r, c].Value;
-        if (!DiceManager.Instance.TryGetDice(diceType, out Dice? dice) || dice == null) {
-          Debug.LogError($"Failed to get dice prefab for {diceType} at ({r},{c}).", this);
-          continue;
-        }
-
-        PlaceDice(dice, r, c);
-      }
-    }
+    DiceTypes = diceTypes;
   }
 
   protected void PlaceDice(Dice dice, int r, int c) {
@@ -115,7 +101,6 @@ public abstract class BaseGrid : MonoBehaviour {
     Dices[r, c] = null;
     Cells[r, c].ClearChild();
   }
-
   #endregion
 
   #region Setting Functions
@@ -136,6 +121,21 @@ public abstract class BaseGrid : MonoBehaviour {
         RectTransform containerRect = containerGO.GetComponent<RectTransform>();
         RectTransform goRect = Cells[r, c].GetComponent<RectTransform>();
         goRect.SetAsChild(containerRect);
+      }
+    }
+
+    if (DiceTypes == null) {
+      DiceTypes = new DiceType?[rows, cols];
+    }
+    else {
+      for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+          if (DiceTypes[r, c] == null)
+            continue;
+
+          Dice dice = DiceManager.Instance.GetDicePrefab(DiceTypes[r, c].Value).GetComponent<Dice>();
+          PlaceDice(dice, r, c);
+        }
       }
     }
   }

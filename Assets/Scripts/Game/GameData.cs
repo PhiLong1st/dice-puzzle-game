@@ -6,9 +6,9 @@ public class GameData : MonoBehaviour {
   [SerializeField] private TextMeshProUGUI scoreText;
   public int CurrentScore { get; private set; }
   public int HighScore { get; private set; }
-  public DiceSlotGrid DiceSlotGrid;
-  public IncomingDice CurrentDiceInput;
-  public IncomingDice NextDiceInput;
+  public DiceGrid DiceSlotGrid;
+  public IncomingDiceGrid CurrentDiceInput;
+  public IncomingDiceGrid NextDiceInput;
 
   public Vector2 CurrentDiceInputGOPosition { get; private set; } = new Vector2(700f, 0f);
   public Vector2 NextDiceInputGOPosition { get; private set; } = new Vector2(700f, -205f);
