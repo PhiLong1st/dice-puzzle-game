@@ -4,8 +4,6 @@ using UnityEngine.UI;
 public abstract class BaseGrid : MonoBehaviour {
   public int Rows => rows;
   public int Cols => cols;
-  public Color32 BackgroundColor => backgroundColor;
-  public Vector2 CellSize => cellSize;
   public Vector2 GridPixelSize {
     get {
       float w = cols * cellSize.x;
@@ -22,7 +20,8 @@ public abstract class BaseGrid : MonoBehaviour {
   protected const float MinSpacing = 0f;
 
   public Dice?[,] Dices { get; private set; }
-  protected DiceType?[,] DiceTypes { get; private set; }
+  protected DiceType?[,] diceTypes { get; private set; }
+  protected CellGrid[,] cellGrids { get; private set; }
 
   [Header("Grid")]
   [SerializeField] protected Color32 backgroundColor = new Color32(50, 10, 20, 105);
@@ -31,24 +30,22 @@ public abstract class BaseGrid : MonoBehaviour {
 
   [Header("Cell")]
   [SerializeField] protected Vector2 cellSize = new Vector2(100f, 100f);
-  protected CellGrid[,] Cells;
+  [SerializeField] private GameObject cellGridPrefab;
 
-  [SerializeField] protected GameObject cellGridPrefab;
   protected GridLayoutGroup gridLayoutGroup;
   protected Image bgImage;
   protected RectTransform rectTransform;
 
   #region MonoBehaviour Unity Lifecycle
   private void Awake() {
-    visualGO = new GameObject("Visual");
-    containerGO = new GameObject("Container");
-
     rectTransform = GetComponent<RectTransform>();
 
+    visualGO = new GameObject("Visual");
     var visualRect = visualGO.AddComponent<RectTransform>();
     visualRect.SetAsChild(rectTransform);
     visualRect.ApplyUiLayout(UiLayoutMode.Stretch);
 
+    containerGO = new GameObject("Container");
     var containerRect = containerGO.AddComponent<RectTransform>();
     containerRect.SetAsChild(rectTransform);
     containerRect.ApplyUiLayout(UiLayoutMode.Stretch);
@@ -60,86 +57,80 @@ public abstract class BaseGrid : MonoBehaviour {
     OnAwake();
   }
 
-  protected void Start() {
+  private void Start() {
     if (!TryValidate(out var err)) {
       Debug.LogError(err, this);
       return;
     }
 
     ApplySettings();
+    InitGrid();
     BuildGrid();
-
-    OnStart();
   }
   #endregion
 
   #region Virtual Functions
   protected virtual void OnAwake() { }
-  protected virtual void OnStart() { }
   #endregion
 
   #region Grid Functions
-  public void InitializeGrid(DiceType?[,] diceTypes) {
-    if (diceTypes == null) {
+  public void SetGridData(DiceType?[,] data) {
+    if (data == null) {
       return;
     }
 
-    DiceTypes = diceTypes;
+    diceTypes = data;
   }
 
   protected void PlaceDice(Dice dice, int r, int c) {
+    diceTypes[r, c] = dice.Type;
     Dices[r, c] = dice;
-    Cells[r, c].PlaceChild(dice);
+    cellGrids[r, c].PlaceChild(dice);
   }
 
   protected void RemoveDice(int r, int c) {
-    if (Dices[r, c] == null) {
-      Debug.Log("Cell is already empty!");
-      return;
-    }
-
+    diceTypes[r, c] = null;
     Dices[r, c] = null;
-    Cells[r, c].ClearChild();
+    cellGrids[r, c].ClearChild();
   }
-  #endregion
 
-  #region Setting Functions
-  private void BuildGrid() {
+  private void InitGrid() {
     if (!cellGridPrefab)
       return;
 
-    Cells = new CellGrid[rows, cols];
-    Dices = new Dice?[rows, cols];
+    Dices ??= new Dice?[rows, cols];
+    cellGrids ??= new CellGrid[rows, cols];
+    diceTypes ??= new DiceType?[rows, cols];
+
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
         GameObject cellGO = Instantiate(cellGridPrefab);
         cellGO.name += $"_{r}_{c}";
 
-        Cells[r, c] = cellGO.GetComponent<CellGrid>();
-        Cells[r, c].SetCoordinates(r, c);
+        cellGrids[r, c] = cellGO.GetComponent<CellGrid>();
+        cellGrids[r, c].SetCoordinates(r, c);
 
         RectTransform containerRect = containerGO.GetComponent<RectTransform>();
-        RectTransform goRect = Cells[r, c].GetComponent<RectTransform>();
+        RectTransform goRect = cellGrids[r, c].GetComponent<RectTransform>();
         goRect.SetAsChild(containerRect);
-      }
-    }
-
-    if (DiceTypes == null) {
-      DiceTypes = new DiceType?[rows, cols];
-    }
-    else {
-      for (int r = 0; r < rows; ++r) {
-        for (int c = 0; c < cols; ++c) {
-          if (DiceTypes[r, c] == null)
-            continue;
-
-          Dice dice = DiceManager.Instance.GetDicePrefab(DiceTypes[r, c].Value).GetComponent<Dice>();
-          PlaceDice(dice, r, c);
-        }
       }
     }
   }
 
+  private void BuildGrid() {
+    for (int r = 0; r < rows; ++r) {
+      for (int c = 0; c < cols; ++c) {
+        if (diceTypes[r, c] == null)
+          continue;
+
+        Dice dice = DiceManager.Instance.GetDicePrefab(diceTypes[r, c].Value).GetComponent<Dice>();
+        PlaceDice(dice, r, c);
+      }
+    }
+  }
+  #endregion
+
+  #region Setting Functions
   private void ApplySettings() {
     rectTransform.sizeDelta = GridPixelSize;
 

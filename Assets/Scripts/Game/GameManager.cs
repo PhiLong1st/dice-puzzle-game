@@ -5,8 +5,6 @@ public class GameManager : MonoBehaviour {
   public static GameManager Instance { get; private set; }
   public GameData GameData { get; private set; }
   private Canvas canvas;
-  [SerializeField] private GameObject DiceGrid;
-  [SerializeField] private GameObject DiceInputGO;
 
   private void Awake() {
     GameData = GetComponent<GameData>();
@@ -63,8 +61,8 @@ public class GameManager : MonoBehaviour {
     GameData.NextDiceInput.GetComponent<RectTransform>().anchoredPosition = GameData.NextDiceInputGOPosition;
   }
 
-  private IncomingDiceGrid GenerateIncomingDice() {
-    IncomingDiceGrid incomingDice = IncomingDiceGridManager.Instance.RandomIncomingDiceGrid();
+  private IncomingDice GenerateIncomingDice() {
+    IncomingDice incomingDice = IncomingDiceManager.Instance.RandomIncomingDiceGrid();
     incomingDice.LockDrag();
     incomingDice.OnDropSuccessful += GenerateNewInput;
     return incomingDice;

@@ -19,15 +19,20 @@ public class DiceGrid : BaseGrid, IDropHandler {
     int dropCol = (int)(Mathf.Abs(gridTopLeftWorld.x - anchorCellCenterWorld.x) / (int)cellSize.x);
     Debug.Log($"Start drop at [{dropRow}, {dropCol}]");
 
-    var incomingDice = draggedGO.GetComponent<IncomingDiceGrid>();
-    Dice?[,] incomingDices = draggedGO.GetComponent<IncomingDiceGrid>().Dices;
+    var incomingDice = draggedGO.GetComponent<IncomingDice>();
+    Dice?[,] incomingDices = draggedGO.GetComponent<IncomingDice>().Dices;
 
     for (int r = 0; r < incomingDices.GetLength(0); ++r) {
       for (int c = 0; c < incomingDices.GetLength(1); ++c) {
         if (incomingDices[r, c] == null)
           continue;
 
-        bool isDiceOverlaps = IsInBounds(r + dropRow, c + dropCol) && Dices[r + dropRow, c + dropCol] != null;
+        bool isInBounds = IsInBounds(r + dropRow, c + dropCol);
+        if (!isInBounds) {
+          return;
+        }
+
+        bool isDiceOverlaps = Dices[r + dropRow, c + dropCol] != null;
         if (isDiceOverlaps) {
           return;
         }

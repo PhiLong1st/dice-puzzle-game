@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, IDragHandler {
+public class IncomingDice : BaseGrid, IBeginDragHandler, IEndDragHandler, IDragHandler {
   public bool IsDropSuccessful { get; private set; }
   public Action OnDropSuccessful;
   private Canvas canvas;
@@ -19,10 +19,6 @@ public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, ID
       canvas = FindFirstObjectByType<Canvas>();
     if (canvas == null)
       Debug.LogError("No Canvas found for DiceInput.", this);
-  }
-
-  protected override void OnStart() {
-
   }
 
   public void OnBeginDrag(PointerEventData eventData) {
@@ -41,6 +37,7 @@ public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, ID
 
     if (IsDropSuccessful) {
       Debug.Log("Drop succesfull");
+      OnDropSuccessful?.Invoke();
       Destroy(gameObject);
     }
     else {
@@ -64,10 +61,10 @@ public class IncomingDiceGrid : BaseGrid, IBeginDragHandler, IEndDragHandler, ID
   }
 
   // public void RotateRight() {
-  //   int rows = Dices.GetLength(0);
-  //   int cols = Dices.GetLength(1);
+  //   int rotatedGridRows = cols;
+  //   int rotatedGridCols = rows;
 
-  //   Dice?[,] rotated = new Dice?[cols, rows];
+  //   Dice?[,] rotated = new Dice?[rotatedGridRows, rotatedGridCols];
   //   for (int r = 0; r < rows; ++r) {
   //     for (int c = 0; c < cols; ++c) {
   //       rotated[c, rows - r - 1] = Dices[r, c];
