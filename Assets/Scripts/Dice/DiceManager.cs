@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DiceType { One, Two, Three, Four, Five, Six };
-
 [Serializable]
 public struct DicePrefab {
   public DiceType Type;
@@ -86,5 +84,29 @@ public class DiceManager : MonoBehaviour {
     }
 
     return Instantiate(dicePrefab).GetComponent<Dice>();
+  }
+
+  public bool TryGetDice(DiceType diceType, out Dice? dice) {
+    dice = null;
+
+    if (!cachedDices.TryGetValue(diceType, out GameObject prefab)) {
+      Debug.LogError($"DICE MANAGER: No prefab registered for {diceType}.", this);
+      return false;
+    }
+
+    if (prefab == null) {
+      Debug.LogError($"DICE MANAGER: Prefab reference for {diceType} is null.", this);
+      return false;
+    }
+
+    GameObject go = Instantiate(prefab);
+    if (!go.TryGetComponent(out Dice returnedDice) || returnedDice == null) {
+      Debug.LogError($"DICE MANAGER: Prefab for {diceType} has no Dice component.", go);
+      Destroy(go);
+      return false;
+    }
+
+    dice = returnedDice;
+    return true;
   }
 }

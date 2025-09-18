@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[RequireComponent(typeof(RectTransform))]
 public class IncomingDiceManager : MonoBehaviour {
+
   public static IncomingDiceManager Instance { get; private set; }
 
-  [SerializeField] private GameObject IncomingDiceGO;
+  [SerializeField] private GameObject incomingDicePrefab;
   private Canvas canvas;
 
   private void Awake() {
@@ -25,7 +25,7 @@ public class IncomingDiceManager : MonoBehaviour {
     DontDestroyOnLoad(gameObject);
   }
 
-  public IncomingDice RandomIncomingDice() {
+  public IncomingDice RandomIncomingDiceGrid() {
     int[,] template = IncomingDiceTemplate.RandomTemplate();
     int rows = template.GetLength(0);
     int cols = template.GetLength(1);
@@ -37,9 +37,11 @@ public class IncomingDiceManager : MonoBehaviour {
       }
     }
 
-    IncomingDice incomingDice = Instantiate(IncomingDiceGO, canvas.transform).GetComponent<IncomingDice>();
-    incomingDice.Initialze(diceTypes);
-
+    var clonedPrefab = Instantiate(incomingDicePrefab);
+    var incomingDice = clonedPrefab.GetComponent<IncomingDice>();
+    incomingDice.GetComponent<RectTransform>().SetAsChild(canvas.GetComponent<RectTransform>());
+    incomingDice.SetGridData(diceTypes);
     return incomingDice;
   }
 }
+

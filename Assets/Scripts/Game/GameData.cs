@@ -6,7 +6,7 @@ public class GameData : MonoBehaviour {
   [SerializeField] private TextMeshProUGUI scoreText;
   public int CurrentScore { get; private set; }
   public int HighScore { get; private set; }
-  public DiceSlotGrid DiceSlotGrid;
+  public DiceGrid DiceSlotGrid;
   public IncomingDice CurrentDiceInput;
   public IncomingDice NextDiceInput;
 
