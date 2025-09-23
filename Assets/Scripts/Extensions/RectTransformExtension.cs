@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.U2D;
 
 public class RectCornerLocator {
   public enum Horizontal { Left, Right }
