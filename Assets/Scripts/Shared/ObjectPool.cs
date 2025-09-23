@@ -16,7 +16,6 @@ public class ObjectPool<T> where T : Component, ISpawnable {
 
   public void Release(T obj) {
     _pool.Push(obj);
-    obj.OnDespawn();
     obj.transform.SetParent(_parent, false);
   }
 }

@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
 
-public class DiceFourVisualSpawner : ObjectSpawner<DiceFourVisual> {
-  protected override DiceFourVisual SpawnNew() => Instantiate(_prefab);
+public class DiceFourVisualSpawner : ObjectSpawner<BaseDiceVisual> {
+  protected override int GetInitialSize() => 5;
 }

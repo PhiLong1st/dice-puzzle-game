@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
-public class DiceOneSpawner : ObjectSpawner<DiceOne> {
-  protected override DiceOne SpawnNew() => Instantiate(_prefab);
+public class DiceOneSpawner : ObjectSpawner<BaseDice> {
+  protected override int GetInitialSize() => 5;
 }

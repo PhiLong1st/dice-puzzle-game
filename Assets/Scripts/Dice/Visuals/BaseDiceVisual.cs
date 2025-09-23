@@ -8,7 +8,6 @@ public abstract class BaseDiceVisual : MonoBehaviour, ISpawnable {
   }
 
   public void OnSpawn() {
-    gameObject.SetActive(false);
-
+    gameObject.SetActive(true);
   }
 }

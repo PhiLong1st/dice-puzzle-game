@@ -2,34 +2,42 @@ using UnityEngine;
 
 public abstract class ObjectSpawner<T> : MonoBehaviour where T : Component, ISpawnable {
   [SerializeField] protected T _prefab;
-  [SerializeField] protected int _initialSize;
   protected ObjectPool<T> _pool;
 
   private void Start() {
     Prewarm();
   }
 
-  public T Spawn() {
+  public virtual T Spawn() {
     if (!_pool.IsEmpty()) {
-      return _pool.Get();
+      var obj = _pool.Get();
+      obj.OnSpawn();
+      return obj;
     }
 
     T newObj = SpawnNew();
+    newObj.OnSpawn();
     return newObj;
   }
 
-  public void Despawn(T obj) {
+  public virtual void Despawn(T obj) {
     _pool.Release(obj);
     obj.OnDespawn();
   }
 
-  protected void Prewarm() {
+  private void Prewarm() {
     _pool = new ObjectPool<T>(transform);
-    for (int i = 0; i < _initialSize; ++i) {
+    int initialSize = GetInitialSize();
+    for (int i = 0; i < initialSize; ++i) {
       T newObj = SpawnNew();
-      _pool.Release(newObj);
+      Despawn(newObj);
     }
   }
 
-  protected abstract T SpawnNew();
+  private T SpawnNew() {
+    T newObj = Instantiate(_prefab);
+    return newObj;
+  }
+
+  protected abstract int GetInitialSize();
 }

@@ -29,12 +29,17 @@ public class DiceVisualSpawner : MonoBehaviour {
 
   private void InitSpawners() {
     _spawners = new();
+    Debug.Log($"jearasdf");
     foreach (var prefab in _spawnerPrefabs) {
       DiceVisualType key = prefab.Type;
       var value = prefab.Prefab.GetComponent<ObjectSpawner<BaseDiceVisual>>();
 
       if (_spawners.ContainsKey(key)) {
         continue;
+      }
+
+      if (value != null) {
+        Debug.Log($"{key}, {value}");
       }
 
       _spawners.Add(key, value);

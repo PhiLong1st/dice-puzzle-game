@@ -4,27 +4,29 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable {
   public abstract DiceType Type { get; }
   public int Point => (int)Type;
 
-  private BaseDiceVisual visualGO;
+  private BaseDiceVisual visual;
   private RectTransform rectTransform;
 
   private void Awake() {
     rectTransform = GetComponent<RectTransform>();
   }
 
-  private void Start() {
-    InitVisual();
-  }
-
   private void InitVisual() {
-    visualGO = DiceVisualManager.Instance.GetDiceVisualByType(Type);
-    visualGO.GetComponent<RectTransform>().SetParent(rectTransform, false);
+    visual = DiceVisualSpawner.Instance.SpawnByType(GetCurrentVisualType());
+    visual.GetComponent<RectTransform>().SetParent(rectTransform, false);
   }
 
   public void OnSpawn() {
-    gameObject.SetActive(false);
+    InitVisual();
+    gameObject.SetActive(true);
   }
 
   public void OnDespawn() {
+    if (visual != null) {
+      DiceVisualSpawner.Instance.Despawn(visual);
+    }
     gameObject.SetActive(false);
   }
+
+  protected abstract DiceVisualType GetCurrentVisualType();
 }

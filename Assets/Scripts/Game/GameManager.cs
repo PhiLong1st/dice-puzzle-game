@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
   public static GameManager Instance { get; private set; }
-
+  [SerializeField] private GameObject testContainer;
 
   private void Awake() {
     if (Instance != null && Instance != this) {
@@ -25,6 +24,27 @@ public class GameManager : MonoBehaviour {
     //   GameData.CurrentDiceInput.RotateLeft();
     //   Debug.Log("Rotate left successfully!");
     // }
+
+    if (Input.GetKeyDown(KeyCode.Space)) {
+      var dice = DiceSpawner.Instance.SpawnRandom();
+      dice.GetComponent<RectTransform>().SetParent(testContainer.GetComponent<RectTransform>(), false);
+      Debug.Log("Spawn successfully!");
+    }
+
+
+    if (Input.GetKeyDown(KeyCode.X)) {
+      Debug.Log("hehe");
+      for (int i = testContainer.transform.childCount - 1; i >= 0; i--) {
+        var child = testContainer.transform.GetChild(i);
+        var dice = child.GetComponent<BaseDice>();
+        if (dice != null) {
+          DiceSpawner.Instance.Despawn(dice);
+          Debug.Log("Despawn successfully!");
+          break;
+        }
+      }
+
+    }
   }
 
   // public void Initialze() {
