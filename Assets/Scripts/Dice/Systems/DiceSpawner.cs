@@ -44,7 +44,7 @@ public class DiceSpawner : MonoBehaviour {
     return _spawners[diceType].Get();
   }
 
-  public void Despawn(BaseDice dice) {
+  public void Release(BaseDice dice) {
     DiceType diceType = dice.Type;
     _spawners[diceType].Release(dice);
   }

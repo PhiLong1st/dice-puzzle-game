@@ -38,12 +38,11 @@ public class GameManager : MonoBehaviour {
         var child = testContainer.transform.GetChild(i);
         var dice = child.GetComponent<BaseDice>();
         if (dice != null) {
-          DiceSpawner.Instance.Despawn(dice);
+          DiceSpawner.Instance.Release(dice);
           Debug.Log("Despawn successfully!");
           break;
         }
       }
-
     }
   }
 
