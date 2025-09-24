@@ -27,7 +27,7 @@ public class DiceVisualSpawner : MonoBehaviour {
       DiceVisualType key = prefab.Type;
       var poolGO = new GameObject($"{key} Visual Pool");
       poolGO.transform.SetParent(transform, false);
-      var pool = new ObjectPool<BaseDiceVisual>(prefab.CreateFn, prefab.ResetFn, poolGO.transform);
+      var pool = new ObjectPool<BaseDiceVisual>(prefab.CreateFn, poolGO.transform);
 
       if (_spawners.ContainsKey(key)) {
         continue;

@@ -27,7 +27,7 @@ public class DiceSpawner : MonoBehaviour {
       DiceType key = prefab.Type;
       var poolGO = new GameObject($"{key} Pool");
       poolGO.transform.SetParent(transform, false);
-      var pool = new ObjectPool<BaseDice>(prefab.CreateFn, prefab.ResetFn, poolGO.transform);
+      var pool = new ObjectPool<BaseDice>(prefab.CreateFn, poolGO.transform);
 
       if (_spawners.ContainsKey(key)) {
         continue;

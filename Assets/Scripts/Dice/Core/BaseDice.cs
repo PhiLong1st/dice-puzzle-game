@@ -21,7 +21,8 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
     gameObject.SetActive(true);
   }
 
-  public void OnDespawn() {
+  public void ResetFn() {
+    Debug.Log("Reset dice");
     if (_visual != null) {
       DiceVisualSpawner.Instance.Despawn(_visual);
     }
@@ -31,8 +32,4 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
   protected abstract DiceVisualType GetCurrentVisualType();
 
   public BaseDice CreateFn() => Instantiate(this);
-
-  public void ResetFn() {
-    Debug.Log("Reset dice");
-  }
 }

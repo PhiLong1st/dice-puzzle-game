@@ -3,7 +3,8 @@ using UnityEngine;
 public abstract class BaseDiceVisual : MonoBehaviour, ISpawnable<BaseDiceVisual> {
   public abstract DiceVisualType Type { get; }
 
-  public void OnDespawn() {
+  public void ResetFn() {
+    Debug.Log("Reset visual");
     gameObject.SetActive(false);
   }
 
@@ -13,9 +14,5 @@ public abstract class BaseDiceVisual : MonoBehaviour, ISpawnable<BaseDiceVisual>
 
   public BaseDiceVisual CreateFn() {
     return Instantiate(this);
-  }
-
-  public void ResetFn() {
-    Debug.Log("Reset visual");
   }
 }
