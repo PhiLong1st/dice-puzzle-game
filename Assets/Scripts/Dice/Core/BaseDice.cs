@@ -1,19 +1,19 @@
 using UnityEngine;
 
-public abstract class BaseDice : MonoBehaviour, ISpawnable {
+public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
   public abstract DiceType Type { get; }
   public int Point => (int)Type;
 
-  private BaseDiceVisual visual;
-  private RectTransform rectTransform;
+  private BaseDiceVisual _visual;
+  private RectTransform _rectTransform;
 
   private void Awake() {
-    rectTransform = GetComponent<RectTransform>();
+    _rectTransform = GetComponent<RectTransform>();
   }
 
   private void InitVisual() {
-    visual = DiceVisualSpawner.Instance.SpawnByType(GetCurrentVisualType());
-    visual.GetComponent<RectTransform>().SetParent(rectTransform, false);
+    _visual = DiceVisualSpawner.Instance.SpawnByType(GetCurrentVisualType());
+    _visual.GetComponent<RectTransform>().SetParent(_rectTransform, false);
   }
 
   public void OnSpawn() {
@@ -22,11 +22,17 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable {
   }
 
   public void OnDespawn() {
-    if (visual != null) {
-      DiceVisualSpawner.Instance.Despawn(visual);
+    if (_visual != null) {
+      DiceVisualSpawner.Instance.Despawn(_visual);
     }
     gameObject.SetActive(false);
   }
 
   protected abstract DiceVisualType GetCurrentVisualType();
+
+  public BaseDice CreateFn() => Instantiate(this);
+
+  public void ResetFn() {
+    Debug.Log("Reset dice");
+  }
 }

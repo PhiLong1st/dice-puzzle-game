@@ -1,21 +1,41 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool<T> where T : Component, ISpawnable {
-  private readonly Stack<T> _pool;
-  private readonly Transform _parent;
+public class ObjectPool<T> where T : ISpawnable<T> {
+  private Transform _parent;
+  private Stack<T> _pool;
+  private int _initialSize;
 
-  public ObjectPool(Transform parent) {
-    _pool = new();
-    _parent = parent;
+  Func<T> createFn;
+  Action resetFn;
+
+  public ObjectPool(Func<T> createFn, Action resetFn, Transform _parent) {
+
   }
 
-  public bool IsEmpty() => _pool.Count == 0;
+  public T Get() {
+    if (_pool.Count == 0) {
+      var obj = _pool.Pop();
+      obj.OnSpawn();
+      return obj;
+    }
 
-  public T Get() => _pool.Pop();
+    T newObj = createFn();
+    newObj.OnSpawn();
+    return newObj;
+  }
 
   public void Release(T obj) {
+    obj.OnDespawn();
     _pool.Push(obj);
-    obj.transform.SetParent(_parent, false);
+  }
+
+  private void Init() {
+    _pool = new();
+    for (int i = 0; i < _initialSize; ++i) {
+      T newObj = createFn();
+      Release(newObj);
+    }
   }
 }
