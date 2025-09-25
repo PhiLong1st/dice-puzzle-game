@@ -30,6 +30,7 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
   }
 
   protected abstract DiceVisualType GetCurrentVisualType();
+  public abstract DiceType? GetNextDiceType();
 
   public BaseDice CreateFn() => Instantiate(this);
 }

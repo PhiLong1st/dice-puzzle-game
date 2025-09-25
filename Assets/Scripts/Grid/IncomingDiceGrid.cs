@@ -55,6 +55,7 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
   public void OnEndDrag(PointerEventData eventData) {
     _canvasGroup.blocksRaycasts = true;
     _canvasGroup.alpha = 1f;
+    _rectTransform.anchoredPosition = _initialPosition;
   }
 
   public void LockDrag() {
@@ -138,7 +139,7 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     }
   }
 
-  private void RotateLeft() {
+  private void RotateRight() {
     int rows = _dices.GetLength(0);
     int cols = _dices.GetLength(1);
 
@@ -153,7 +154,7 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     LayoutDiceGrid();
   }
 
-  private void RotateRight() {
+  private void RotateLeft() {
     int rows = _dices.GetLength(0);
     int cols = _dices.GetLength(1);
 
