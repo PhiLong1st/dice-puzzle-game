@@ -36,7 +36,9 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
         if (!incomingDices[r, c])
           continue;
 
-        PlaceDice(r + anchorCell.row, c + anchorCell.col, incomingDices[r, c]);
+        int dropRow = r + anchorCell.row;
+        int dropCol = c + anchorCell.col;
+        PlaceDice(dropRow, dropCol, incomingDices[r, c]);
       }
     }
 

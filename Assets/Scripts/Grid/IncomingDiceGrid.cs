@@ -1,17 +1,18 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler {
   [SerializeField] private Vector2 _cellSize = new Vector2(100f, 100f);
-  enum RotateDirection { Left, Right };
-
   private Canvas _canvas;
   private RectTransform _rectTransform;
   private CanvasGroup _canvasGroup;
   private GameObject _visual;
-  private BaseDice[,] _dices;
   private Vector2 _initialPosition;
+
+  private BaseDice[,] _dices;
   public BaseDice[,] Dices => _dices;
 
   #region Unity Lifecycle
@@ -85,14 +86,55 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
     int rows = template.GetLength(0);
     int cols = template.GetLength(1);
 
+    int need = 0;
+    for (int r = 0; r < rows; r++)
+      for (int c = 0; c < cols; c++)
+        if (template[r, c] != 0)
+          need++;
+
+    var allTypes = (DiceType[])Enum.GetValues(typeof(DiceType));
+    int distinctTypes = allTypes.Length;
+
+    if (need > distinctTypes) {
+      Debug.LogWarning($"Renew(): Need {need} unique dice but only {distinctTypes} types exist. " + "Uniqueness will be enforced up to available types.");
+    }
+
+    var seenTypes = new HashSet<DiceType>();
     _dices = new BaseDice[rows, cols];
+
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {
         if (template[r, c] == 0)
           continue;
 
-        BaseDice randomDice = DiceSpawner.Instance.SpawnRandom();
+        BaseDice randomDice = null;
+        int attempts = 0;
+        const int maxAttempts = 256;
+
+        do {
+          if (randomDice != null) {
+            DiceSpawner.Instance.Release(randomDice);
+            randomDice = null;
+          }
+
+          randomDice = DiceSpawner.Instance.SpawnRandom();
+          attempts++;
+
+          bool typeSeen = seenTypes.Contains(randomDice.Type);
+          bool uniquenessPossible = seenTypes.Count < distinctTypes;
+
+          if (!typeSeen || !uniquenessPossible) {
+            break;
+          }
+
+        } while (attempts < maxAttempts);
+
+        if (attempts >= maxAttempts) {
+          Debug.LogWarning("Renew(): maxAttempts reached while trying to ensure unique types. " + "Accepting last spawned dice to avoid hang.");
+        }
+
         _dices[r, c] = randomDice;
+        seenTypes.Add(randomDice.Type);
       }
     }
 
