@@ -14,4 +14,6 @@ public abstract class BaseDiceVisual : MonoBehaviour, ISpawnable<BaseDiceVisual>
   public BaseDiceVisual CreateFn() {
     return Instantiate(this);
   }
+
+  public void Release() => DiceVisualSpawner.Instance.Release(this);
 }

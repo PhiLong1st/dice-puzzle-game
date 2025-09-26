@@ -23,7 +23,7 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
 
   public void ResetFn() {
     if (_visual != null) {
-      DiceVisualSpawner.Instance.Despawn(_visual);
+      DiceVisualSpawner.Instance.Release(_visual);
     }
     gameObject.SetActive(false);
   }
@@ -32,4 +32,6 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
   public abstract DiceType? GetNextDiceType();
 
   public BaseDice CreateFn() => Instantiate(this);
+
+  public void Release() => DiceSpawner.Instance.Release(this);
 }

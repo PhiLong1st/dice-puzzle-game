@@ -41,7 +41,7 @@ public class DiceVisualSpawner : MonoBehaviour {
     return _spawners[type].Get();
   }
 
-  public void Despawn(BaseDiceVisual visual) {
+  public void Release(BaseDiceVisual visual) {
     DiceVisualType diceType = visual.Type;
     _spawners[diceType].Release(visual);
   }

@@ -232,8 +232,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cellSize: {x: 100, y: 100}
-  _rows: 8
-  _cols: 12
+  _spacing: {x: 10, y: 10}
+  _rows: 5
+  _cols: 5
 --- !u!1 &640952126
 GameObject:
   m_ObjectHideFlags: 0
