@@ -22,7 +22,6 @@ public abstract class BaseDice : MonoBehaviour, ISpawnable<BaseDice> {
   }
 
   public void ResetFn() {
-    Debug.Log("Reset dice");
     if (_visual != null) {
       DiceVisualSpawner.Instance.Despawn(_visual);
     }

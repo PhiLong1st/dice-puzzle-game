@@ -9,7 +9,6 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
   private Canvas _canvas;
   private RectTransform _rectTransform;
   private CanvasGroup _canvasGroup;
-  private GameObject _visual;
   private Vector2 _initialPosition;
 
   private BaseDice[,] _dices;
@@ -142,6 +141,7 @@ public class IncomingDiceGrid : MonoBehaviour, IBeginDragHandler, IEndDragHandle
   }
 
   private void PlaceDice(int r, int c, BaseDice dice) {
+    _dices[r, c] = dice;
     RectTransform cellRectTransform = dice.GetComponent<RectTransform>();
     cellRectTransform.SetParent(_rectTransform, false);
 

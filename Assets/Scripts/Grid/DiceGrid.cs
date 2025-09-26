@@ -30,7 +30,7 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
     (int row, int col) anchorCell = GetAnchorDropCell(draggedGO);
     var incomingDiceGrid = draggedGO.GetComponent<IncomingDiceGrid>();
     BaseDice[,] incomingDices = incomingDiceGrid.Dices;
-
+    List<(int row, int col)> lst = new();
     for (int r = 0; r < incomingDices.GetLength(0); ++r) {
       for (int c = 0; c < incomingDices.GetLength(1); ++c) {
         if (!incomingDices[r, c])
@@ -39,11 +39,14 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
         int dropRow = r + anchorCell.row;
         int dropCol = c + anchorCell.col;
         PlaceDice(dropRow, dropCol, incomingDices[r, c]);
+
+        lst.Add((dropRow, dropCol));
       }
     }
 
     incomingDiceGrid.OnDropSucceful();
     OnDropSuccessful?.Invoke();
+    HandleAfterDrop(lst);
   }
 
   public void HandleAfterDrop(List<(int row, int col)> incomingDiceCells) {
@@ -52,35 +55,31 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
 
     int[] dx = { -1, 0, 0, 1 };
     int[] dy = { 0, -1, 1, 0 };
-    bool[,] vst = new bool[rows, cols];
+    bool[,] seen = new bool[rows, cols];
 
     Stack<(int, int)> st = new();
 
     void DFS(int r, int c) {
       Debug.Log($"DFS: [{r}, {c}]");
-      vst[r, c] = true;
+      seen[r, c] = true;
       st.Push((r, c));
       for (int i = 0; i < 4; ++i) {
         int newRow = r + dx[i];
         int newCol = c + dy[i];
 
         if (!IsInBounds(newRow, newCol)) {
-          Debug.Log($"DFS: [{r} {c}] - IsInBounds");
           continue;
         }
 
-        if (vst[newRow, newCol]) {
-          Debug.Log($"DFS: [{r} {c}] - (vst[newRow, newCol])");
+        if (seen[newRow, newCol]) {
           continue;
         }
 
         if (_dices[newRow, newCol] == null) {
-          Debug.Log($"DFS: [{r} {c}] - (_dices[newRow, newCol] == null)");
           continue;
         }
 
         if (_dices[newRow, newCol].Type != _dices[r, c].Type) {
-          Debug.Log($"DFS: [{r} {c}] - dices[newRow, newCol].Type != dices[r, c].Type");
           continue;
         }
 
@@ -91,11 +90,12 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
     foreach (var cell in incomingDiceCells) {
       Debug.Log($"Start at [{cell.row}, {cell.col}]");
 
-      if (vst[cell.row, cell.col])
+      if (seen[cell.row, cell.col])
         continue;
 
       DiceType targetType = _dices[cell.row, cell.col].Type;
       DiceType? nextDiceType = _dices[cell.row, cell.col].GetNextDiceType();
+
       DFS(cell.row, cell.col);
 
       if (st.Count >= 3) {
@@ -103,14 +103,17 @@ public class DiceGrid : MonoBehaviour, IDropHandler {
 
         while (st.Count > 0) {
           (int r, int c) = st.Peek();
+
           Debug.Log($"[{r}, {c}] -> {_dices[r, c]} -> Point: {_dices[r, c].Point}");
-          // GameData.AddScore(_dices[r, c].Value);
-          DiceSpawner.Instance.Release(_dices[cell.row, cell.col]);
+
+          DiceSpawner.Instance.Release(_dices[r, c]);
+          _dices[r, c] = null;
+
           st.Pop();
         }
 
-        var nextDice = DiceSpawner.Instance.SpawnByType(targetType);
-        if (nextDice != null) {
+        if (nextDiceType != null) {
+          var nextDice = DiceSpawner.Instance.SpawnByType(nextDiceType.Value);
           PlaceDice(cell.row, cell.col, nextDice);
         }
 
